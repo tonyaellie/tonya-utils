@@ -14,5 +14,17 @@ const config = {
     defaultLocale: 'en',
   },
   optimizeFonts: true,
+  rewrites: async () => {
+    return [
+      {
+        source: '/ingest/js/script.js',
+        destination: 'https://ingest.tokia.dev/js/script.js',
+      },
+      {
+        source: '/ingest/api/event',
+        destination: 'https://ingest.tokia.dev/api/event',
+      },
+    ];
+  },
 };
 export default config;
