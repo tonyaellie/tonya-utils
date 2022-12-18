@@ -1,28 +1,18 @@
-# Create T3 App
+# Tonya's Utils
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+A collection of utility functions and tools. Hosted at https://utils.tokia.dev/.
 
-## What's next? How do I make an app with this?
+## Utils
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+- [Counter](https://utils.tokia.dev/counter): A tool for counting the number of characters, words, or lines in a given piece of text.
+- [Diff](https://utils.tokia.dev/diff): A tool for comparing the differences between two pieces of text.
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## Issues and Contributing
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+If you have an issue or want to request a new feature, please report it on the [bug tracker](https://github.com/tonyaellie/tonya-utils/issues).
 
-## Learn More
+If you would like to contribute a new utility to Tonya's Utils, please submit a pull request with one utility per request. Make sure to include links on the home page and in the README.
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+## License
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
-
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
-
-## How do I deploy this?
-
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+Tonya's Utils is licensed under the [GNU General Public License v3.0](https://github.com/tonyaellie/tonya-utils/blob/main/LICENSE).

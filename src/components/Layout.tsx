@@ -11,7 +11,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title, description }) => {
   return (
     <>
       <Head>
-        <title>{`Tonya's Util - ${title}`}</title>
+        <title>{`Tonya's Utils - ${title}`}</title>
         <meta name="description" content={description} />
         <link rel="icon" href="/favicon.ico" />
         <link
