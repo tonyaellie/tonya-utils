@@ -6,6 +6,14 @@ A collection of utility functions and tools. Hosted at https://utils.tokia.dev/.
 
 - [Counter](https://utils.tokia.dev/counter): A tool for counting the number of characters, words, or lines in a given piece of text.
 - [Diff](https://utils.tokia.dev/diff): A tool for comparing the differences between two pieces of text.
+- [Encoder](https://utils.tokia.dev/encoder): A tool for encoding a given piece of text.
+
+## Planned Utils
+
+- Hash: A tool for generating hashes of a given piece of text.
+- Decoder: A tool for decoding a given piece of text, similar to Encoder.
+- Randomizer: A tool for generating random numbers, strings, and other data.
+- QR Code Generator: A tool for generating QR codes from a given piece of text.
 
 ## Issues and Contributing
 

@@ -47,6 +47,14 @@ const Layout: React.FC<LayoutProps> = ({ children, title, description }) => {
           </Link>
         </header>
         {children}
+        <footer className="flex justify-center">
+          <Link
+            className="pr-2 underline"
+            href="https://github.com/tonyaellie/tonya-utils"
+          >
+            {`© Copyright ${new Date().getFullYear()} Tonya's Utils Contributors`}
+          </Link>
+        </footer>
       </main>
     </>
   );

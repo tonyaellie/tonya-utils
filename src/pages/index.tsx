@@ -23,6 +23,7 @@ const Home: NextPage = () => {
       <div className="flex flex-col">
         <CustomLink name="counter" />
         <CustomLink name="diff" />
+        <CustomLink name="encoder" />
       </div>
     </Layout>
   );
