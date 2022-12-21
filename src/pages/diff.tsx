@@ -1,6 +1,6 @@
 import { type NextPage } from 'next';
 import { useState } from 'react';
-import ReactDiffViewer from 'react-diff-viewer';
+import ReactDiffViewer from 'react-diff-viewer-continued';
 import Layout from '../components/Layout';
 
 const Diff: NextPage = () => {
@@ -23,7 +23,7 @@ const Diff: NextPage = () => {
           onChange={(e) => setNewText(e.target.value)}
           style={{ width: '100%', height: '100px' }}
         />
-        count: {newText.length}
+        char count: {newText.length}
       </div>
 
       <ReactDiffViewer

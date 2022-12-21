@@ -20,7 +20,7 @@ specifiers:
   prettier: ^2.7.1
   prettier-plugin-tailwindcss: ^0.1.13
   react: 18.2.0
-  react-diff-viewer: ^3.1.1
+  react-diff-viewer-continued: ^3.2.3
   react-dom: 18.2.0
   superjson: 1.9.1
   tailwindcss: ^3.2.0
@@ -36,7 +36,7 @@ dependencies:
   '@trpc/server': 10.4.3
   next: 13.0.2_biqbaboplfbrettd7655fr4n2y
   react: 18.2.0
-  react-diff-viewer: 3.1.1_biqbaboplfbrettd7655fr4n2y
+  react-diff-viewer-continued: 3.2.3_biqbaboplfbrettd7655fr4n2y
   react-dom: 18.2.0_react@18.2.0
   superjson: 1.9.1
   zod: 3.19.1
@@ -1034,8 +1034,8 @@ packages:
     resolution: {integrity: sha512-gxtyfqMg7GKyhQmb056K7M3xszy/myH8w+B4RT+QXBQsvAOdc3XymqDDPHx1BgPgsdAA5SIifona89YtRATDzw==}
     dev: true
 
-  /diff/4.0.2:
-    resolution: {integrity: sha512-58lmxKSA4BNyLz+HHMUzlOEpg09FV+ev6ZMe3vJihgdxzgcwZ8VoEEPmALCZG9LmqfVoNMMKpttIYTVG6uDY7A==}
+  /diff/5.1.0:
+    resolution: {integrity: sha512-D+mk+qE8VC/PAUrlAU34N+VfXev0ghe5ywmpqrawphmVZc1bEfn56uo9qpyGp1p4xpzOHkSW4ztBd6L7Xx4ACw==}
     engines: {node: '>=0.3.1'}
     dev: false
 
@@ -1903,8 +1903,8 @@ packages:
       yallist: 4.0.0
     dev: true
 
-  /memoize-one/5.2.1:
-    resolution: {integrity: sha512-zYiwtZUcYyXKo/np96AGZAckk+FWWsUdJ3cHGGmld7+AhvcWmQyGCYUh1hc4Q/pkOhb65dQR/pqCyK0cOaHz4Q==}
+  /memoize-one/6.0.0:
+    resolution: {integrity: sha512-rkpe71W0N0c0Xz6QD0eJETuWAJGnJ9afsl1srmwPrI+yBCkge5EycXXbYRyvL29zZVUWQCY7InPRCv3GDXuZNw==}
     dev: false
 
   /merge2/1.4.1:
@@ -2279,18 +2279,17 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /react-diff-viewer/3.1.1_biqbaboplfbrettd7655fr4n2y:
-    resolution: {integrity: sha512-rmvwNdcClp6ZWdS11m1m01UnBA4OwYaLG/li0dB781e/bQEzsGyj+qewVd6W5ztBwseQ72pO7nwaCcq5jnlzcw==}
+  /react-diff-viewer-continued/3.2.3_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-hHXZsXEPua5vBlS6EV1XepQdjkKFeR/2VN3XNJ6pK+KS46hdoGeABx1bjatvpst6xFf2TODHxJ1CPHf99j9rmQ==}
     engines: {node: '>= 8'}
     peerDependencies:
-      react: ^15.3.0 || ^16.0.0
-      react-dom: ^15.3.0 || ^16.0.0
+      react: ^15.3.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^15.3.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
     dependencies:
       classnames: 2.3.2
-      create-emotion: 10.0.27
-      diff: 4.0.2
+      diff: 5.1.0
       emotion: 10.0.27
-      memoize-one: 5.2.1
+      memoize-one: 6.0.0
       prop-types: 15.8.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0

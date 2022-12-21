@@ -14,6 +14,7 @@ A collection of utility functions and tools. Hosted at https://utils.tokia.dev/.
 - Decoder: A tool for decoding a given piece of text, similar to Encoder.
 - Randomizer: A tool for generating random numbers, strings, and other data.
 - QR Code Generator: A tool for generating QR codes from a given piece of text.
+- Reader: A tool for reading a given piece of text aloud.
 
 ## Issues and Contributing
 

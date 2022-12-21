@@ -10,7 +10,10 @@ type CustomLinkProps = {
 
 const CustomLink: React.FC<CustomLinkProps> = ({ name }) => {
   return (
-    <Link href={`/${name}`} className="capitalize underline hover:text-slate-300">
+    <Link
+      href={`/${name}`}
+      className="capitalize underline hover:text-slate-300"
+    >
       {name}
     </Link>
   );
