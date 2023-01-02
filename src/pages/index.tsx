@@ -11,8 +11,8 @@ type CustomLinkProps = {
 const CustomLink: React.FC<CustomLinkProps> = ({ name }) => {
   return (
     <Link
-      href={`/${name}`}
-      className="capitalize underline hover:text-slate-300"
+      href={`/${name.toLocaleLowerCase()}`}
+      className="capitalize underline hover:text-blue-600"
     >
       {name}
     </Link>
@@ -27,6 +27,7 @@ const Home: NextPage = () => {
         <CustomLink name="counter" />
         <CustomLink name="diff" />
         <CustomLink name="encoder" />
+        <CustomLink name="TTTime" />
       </div>
     </Layout>
   );

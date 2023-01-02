@@ -39,10 +39,10 @@ const Layout: React.FC<LayoutProps> = ({ children, title, description }) => {
           src="/ingest/js/script.js"
         />
       </Head>
-      <main className="mx-auto min-h-screen justify-center p-4 antialiased">
+      <main className="mx-auto min-h-screen justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] p-4 text-blue-400 antialiased">
         <header className="top-0 z-50 mb-4 flex place-content-between">
           <span className="font-bold">{title}</span>
-          <Link href="/" className="border px-1 hover:text-slate-300">
+          <Link href="/" className="border px-1 hover:text-blue-600">
             Home
           </Link>
         </header>

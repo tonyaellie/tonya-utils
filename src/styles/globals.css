@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+  @apply border-blue-400;
+}
+
+@font-face {
+  font-family: virgil;
+  src: url(Virgil.woff2);
+}

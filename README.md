@@ -7,6 +7,7 @@ A collection of utility functions and tools. Hosted at https://utils.tokia.dev/.
 - [Counter](https://utils.tokia.dev/counter): A tool for counting the number of characters, words, or lines in a given piece of text.
 - [Diff](https://utils.tokia.dev/diff): A tool for comparing the differences between two pieces of text.
 - [Encoder](https://utils.tokia.dev/encoder): A tool for encoding a given piece of text.
+- [TTTime](https://utils.tokia.dev/tttime): A clock that displays the current TTTime.
 
 ## Planned Utils
 
@@ -15,6 +16,13 @@ A collection of utility functions and tools. Hosted at https://utils.tokia.dev/.
 - Randomizer: A tool for generating random numbers, strings, and other data.
 - QR Code Generator: A tool for generating QR codes from a given piece of text.
 - Reader: A tool for reading a given piece of text aloud.
+- Password Generator: A tool for generating secure passwords.
+- YouTube Downloader: A tool for downloading YouTube videos.
+- URL Shortener: A tool for shortening URLs.
+- Request Catcher: A tool for catching HTTP requests.
+- Formatter: A tool for formatting JSON/XML/HTML/CSS/JavaScript.
+- Team Generator: A tool for generating teams from a given list of names.
+- Countdown Timer: A tool for creating countdown timers.
 
 ## Issues and Contributing
 
