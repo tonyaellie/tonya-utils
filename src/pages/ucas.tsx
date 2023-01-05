@@ -1,6 +1,6 @@
 import { type NextPage } from 'next';
 import { useRouter } from 'next/router';
-import type { Dispatch, SetStateAction} from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { z } from 'zod';
@@ -30,6 +30,41 @@ const allQualification = [
   { name: 'EPQ C', value: 16, id: 'epq-c' },
   { name: 'EPQ D', value: 12, id: 'epq-d' },
   { name: 'EPQ E', value: 8, id: 'epq-e' },
+  {
+    name: 'BTEC Level 3 National Diploma D*D*',
+    value: 112,
+    id: 'btec-level-3-national-diploma-d-star-d-star',
+  },
+  {
+    name: 'BTEC Level 3 National Diploma D*D',
+    value: 104,
+    id: 'btec-level-3-national-diploma-d-star-d',
+  },
+  {
+    name: 'BTEC Level 3 National Diploma DD',
+    value: 96,
+    id: 'btec-level-3-national-diploma-dd',
+  },
+  {
+    name: 'BTEC Level 3 National Diploma DM',
+    value: 80,
+    id: 'btec-level-3-national-diploma-dm',
+  },
+  {
+    name: 'BTEC Level 3 National Diploma MM',
+    value: 64,
+    id: 'btec-level-3-national-diploma-mm',
+  },
+  {
+    name: 'BTEC Level 3 National Diploma MP',
+    value: 48,
+    id: 'btec-level-3-national-diploma-mp',
+  },
+  {
+    name: 'BTEC Level 3 National Diploma PP',
+    value: 31,
+    id: 'btec-level-3-national-diploma-pp',
+  },
   {
     name: 'NCFE Cache Technical Level 3 Extended Diploma in Health and Social Care A*',
     value: 84,
@@ -150,10 +185,7 @@ const Ucas: NextPage = () => {
   }, [router.query.data]);
 
   return (
-    <Layout
-      title="UCAS Calculator"
-      description="Calculate UCAS points."
-    >
+    <Layout title="UCAS Calculator" description="Calculate UCAS points.">
       {qualifications.map((qualification, index) => (
         <QualificationBox
           qualifications={qualifications}
