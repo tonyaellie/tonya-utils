@@ -170,15 +170,19 @@ const Ucas: NextPage = () => {
 
   useEffect(() => {
     if (router.query.data) {
-      const data = decodeURIComponent(router.query.data as string);
+      try {
+        const data = decodeURIComponent(router.query.data as string);
 
-      console.log(JSON.parse(data));
+        console.log(JSON.parse(data));
 
-      // validate data using zod
-      // technically abusable but eh
-      const validatedData = qualificationsSchema.parse(JSON.parse(data));
+        // validate data using zod
+        // technically abusable but eh
+        const validatedData = qualificationsSchema.parse(JSON.parse(data));
 
-      setQualifications(validatedData);
+        setQualifications(validatedData);
+      } catch {
+        alert('Invalid data');
+      }
     }
   }, [router.query.data]);
 
@@ -213,6 +217,7 @@ const Ucas: NextPage = () => {
                 : 'http://localhost:3000'
             }/ucas?data=${encodeURIComponent(JSON.stringify(qualifications))}`
           );
+          alert('Copied to clipboard');
         }}
       >
         Share
