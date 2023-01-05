@@ -1,7 +1,10 @@
-import { type NextPage } from 'next';
-import Layout from '../components/Layout';
+import crypto from 'crypto';
 
 import { useState, useMemo } from 'react';
+
+import { type NextPage } from 'next';
+
+import Layout from '../components/Layout';
 
 type Encoder = {
   type: string;
@@ -45,6 +48,12 @@ const encodeText = (text: string, encoder: Encoder) => {
           }
         })
         .join('');
+    case 'md5':
+      return crypto.createHash('md5').update(text).digest('hex');
+    case 'sha1':
+      return crypto.createHash('sha1').update(text).digest('hex');
+    case 'sha256':
+      return crypto.createHash('sha256').update(text).digest('hex');
     default:
       throw new Error(`Unsupported encoding type: ${encoder.type}`);
   }
@@ -100,6 +109,9 @@ const Encoder: NextPage = () => {
               <option value="hex">Hex</option>
               <option value="binary">Binary</option>
               <option value="caesercipher">Caeser Cipher</option>
+              <option value="md5">MD5</option>
+              <option value="sha1">SHA1</option>
+              <option value="sha256">SHA256</option>
             </select>
             <>
               <span className="p-1" />

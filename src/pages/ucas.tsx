@@ -1,9 +1,11 @@
-import { type NextPage } from 'next';
-import { useRouter } from 'next/router';
 import type { Dispatch, SetStateAction } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
+
+import { type NextPage } from 'next';
+import { useRouter } from 'next/router';
 import { z } from 'zod';
+
 import Layout from '../components/Layout';
 
 type Qualification = {

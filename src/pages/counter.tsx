@@ -1,5 +1,7 @@
-import { type NextPage } from 'next';
 import { useMemo, useState } from 'react';
+
+import { type NextPage } from 'next';
+
 import Layout from '../components/Layout';
 
 const Counter: NextPage = () => {

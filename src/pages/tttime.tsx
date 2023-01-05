@@ -1,5 +1,7 @@
-import { type NextPage } from 'next';
 import { useEffect, useState } from 'react';
+
+import { type NextPage } from 'next';
+
 import Layout from '../components/Layout';
 
 const TTTime: NextPage = () => {

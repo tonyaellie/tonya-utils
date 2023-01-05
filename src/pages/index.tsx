@@ -1,5 +1,6 @@
 import { type NextPage } from 'next';
 import Link from 'next/link';
+
 import Layout from '../components/Layout';
 
 // TODO: make look good
@@ -29,6 +30,7 @@ const Home: NextPage = () => {
         <CustomLink name="encoder" />
         <CustomLink name="TTTime" />
         <CustomLink name="UCAS" />
+        <CustomLink name="countdown" />
       </div>
     </Layout>
   );

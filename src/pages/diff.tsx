@@ -1,6 +1,8 @@
-import { type NextPage } from 'next';
 import { useState } from 'react';
+
+import { type NextPage } from 'next';
 import ReactDiffViewer from 'react-diff-viewer-continued';
+
 import Layout from '../components/Layout';
 
 const Diff: NextPage = () => {
