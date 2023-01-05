@@ -1,6 +1,7 @@
 import { type NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { Dispatch, SetStateAction, useEffect } from 'react';
+import type { Dispatch, SetStateAction} from 'react';
+import { useEffect } from 'react';
 import { useState } from 'react';
 import { z } from 'zod';
 import Layout from '../components/Layout';
@@ -151,7 +152,7 @@ const Ucas: NextPage = () => {
   return (
     <Layout
       title="UCAS Calculator"
-      description="Find the different in two bits of text."
+      description="Calculate UCAS points."
     >
       {qualifications.map((qualification, index) => (
         <QualificationBox
