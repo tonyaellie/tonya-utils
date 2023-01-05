@@ -10,17 +10,23 @@ type Qualification = {
 };
 
 const allQualification = [
-  { name: 'AS Level A', value: 20, id: 'as-level-a' },
-  { name: 'AS Level B', value: 16, id: 'as-level-b' },
-  { name: 'AS Level C', value: 12, id: 'as-level-c' },
-  { name: 'AS Level D', value: 10, id: 'as-level-d' },
-  { name: 'AS Level E', value: 6, id: 'as-level-e' },
   { name: 'A Level A*', value: 56, id: 'a-level-a-star' },
   { name: 'A Level A', value: 48, id: 'a-level-a' },
   { name: 'A Level B', value: 40, id: 'a-level-b' },
   { name: 'A Level C', value: 32, id: 'a-level-c' },
   { name: 'A Level D', value: 24, id: 'a-level-d' },
   { name: 'A Level E', value: 16, id: 'a-level-e' },
+  { name: 'AS Level A', value: 20, id: 'as-level-a' },
+  { name: 'AS Level B', value: 16, id: 'as-level-b' },
+  { name: 'AS Level C', value: 12, id: 'as-level-c' },
+  { name: 'AS Level D', value: 10, id: 'as-level-d' },
+  { name: 'AS Level E', value: 6, id: 'as-level-e' },
+  { name: 'EPQ A*', value: 28, id: 'epq-a-star' },
+  { name: 'EPQ A', value: 24, id: 'epq-a' },
+  { name: 'EPQ B', value: 20, id: 'epq-b' },
+  { name: 'EPQ C', value: 16, id: 'epq-c' },
+  { name: 'EPQ D', value: 12, id: 'epq-d' },
+  { name: 'EPQ E', value: 8, id: 'epq-e' },
 ];
 
 const QualificationBox: React.FC<{
