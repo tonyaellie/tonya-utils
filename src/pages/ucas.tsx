@@ -1,6 +1,8 @@
 import { type NextPage } from 'next';
-import type { Dispatch, SetStateAction } from 'react';
+import { useRouter } from 'next/router';
+import { Dispatch, SetStateAction, useEffect } from 'react';
 import { useState } from 'react';
+import { z } from 'zod';
 import Layout from '../components/Layout';
 
 type Qualification = {
@@ -27,6 +29,31 @@ const allQualification = [
   { name: 'EPQ C', value: 16, id: 'epq-c' },
   { name: 'EPQ D', value: 12, id: 'epq-d' },
   { name: 'EPQ E', value: 8, id: 'epq-e' },
+  {
+    name: 'NCFE Cache Technical Level 3 Extended Diploma in Health and Social Care A*',
+    value: 84,
+    id: 'ncfe-cache-technical-level-3-extended-diploma-in-health-and-social-care-a-star',
+  },
+  {
+    name: 'NCFE Cache Technical Level 3 Extended Diploma in Health and Social Care A',
+    value: 72,
+    id: 'ncfe-cache-technical-level-3-extended-diploma-in-health-and-social-care-a',
+  },
+  {
+    name: 'NCFE Cache Technical Level 3 Extended Diploma in Health and Social Care B',
+    value: 60,
+    id: 'ncfe-cache-technical-level-3-extended-diploma-in-health-and-social-care-b',
+  },
+  {
+    name: 'NCFE Cache Technical Level 3 Extended Diploma in Health and Social Care C',
+    value: 48,
+    id: 'ncfe-cache-technical-level-3-extended-diploma-in-health-and-social-care-c',
+  },
+  {
+    name: 'NCFE Cache Technical Level 3 Extended Diploma in Health and Social Care D',
+    value: 36,
+    id: 'ncfe-cache-technical-level-3-extended-diploma-in-health-and-social-care-d',
+  },
 ];
 
 const QualificationBox: React.FC<{
@@ -91,10 +118,35 @@ const QualificationBox: React.FC<{
   );
 };
 
+const qualificationsSchema = z.array(
+  z.object({
+    name: z.string(),
+    value: z.number(),
+    id: z.string(),
+  })
+);
+
 const Ucas: NextPage = () => {
+  const router = useRouter();
   const [qualifications, setQualifications] = useState<Qualification[]>([
     { name: 'Choose a qualification', value: 0, id: 'choose' },
   ]);
+
+  useEffect(() => {
+    if (router.query.data) {
+      const data = Buffer.from(router.query.data as string, 'base64').toString(
+        'utf-8'
+      );
+
+      console.log(JSON.parse(data));
+
+      // validate data using zod
+      // technically abusable but eh
+      const validatedData = qualificationsSchema.parse(JSON.parse(data));
+
+      setQualifications(validatedData);
+    }
+  }, [router.query.data]);
 
   return (
     <Layout
@@ -120,6 +172,22 @@ const Ucas: NextPage = () => {
         Add qualification
       </button>
       <div>Total: {qualifications.reduce((a, b) => a + b.value, 0)}</div>
+      <button
+        onClick={() => {
+          navigator.clipboard.writeText(
+            `${
+              process.env.NODE_ENV === 'production'
+                ? // FIXME: url should not be hardcoded
+                  'https://utils.tokia.dev'
+                : 'http://localhost:3000'
+            }/ucas?data=${encodeURIComponent(
+              Buffer.from(JSON.stringify(qualifications)).toString('base64')
+            )}`
+          );
+        }}
+      >
+        Share
+      </button>
     </Layout>
   );
 };
