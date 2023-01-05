@@ -28,6 +28,7 @@ const Home: NextPage = () => {
         <CustomLink name="diff" />
         <CustomLink name="encoder" />
         <CustomLink name="TTTime" />
+        <CustomLink name="UCAS" />
       </div>
     </Layout>
   );

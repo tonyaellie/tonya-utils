@@ -8,6 +8,7 @@ A collection of utility functions and tools. Hosted at https://utils.tokia.dev/.
 - [Diff](https://utils.tokia.dev/diff): A tool for comparing the differences between two pieces of text.
 - [Encoder](https://utils.tokia.dev/encoder): A tool for encoding a given piece of text.
 - [TTTime](https://utils.tokia.dev/tttime): A clock that displays the current TTTime.
+- [UCAS](https://utils.tokia.dev/ucas): A tool for calculating UCAS points from A-level grades.
 
 ## Planned Utils
 
