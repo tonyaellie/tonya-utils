@@ -170,9 +170,7 @@ const Ucas: NextPage = () => {
 
   useEffect(() => {
     if (router.query.data) {
-      const data = Buffer.from(router.query.data as string, 'base64').toString(
-        'utf-8'
-      );
+      const data = decodeURIComponent(router.query.data as string);
 
       console.log(JSON.parse(data));
 
@@ -213,9 +211,7 @@ const Ucas: NextPage = () => {
                 ? // FIXME: url should not be hardcoded
                   'https://utils.tokia.dev'
                 : 'http://localhost:3000'
-            }/ucas?data=${encodeURIComponent(
-              Buffer.from(JSON.stringify(qualifications)).toString('base64')
-            )}`
+            }/ucas?data=${encodeURIComponent(JSON.stringify(qualifications))}`
           );
         }}
       >
