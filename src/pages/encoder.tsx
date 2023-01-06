@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import { text } from 'stream/consumers';
 
 import { useState, useMemo } from 'react';
 
@@ -59,15 +60,19 @@ const encodeText = (text: string, encoder: Encoder) => {
   }
 };
 
-const Encoder: NextPage = () => {
-  const [text, setText] = useState('');
-  const [numberOfEncoders, setNumberOfEncoders] = useState(0);
-  const [encoders, setEncoders] = useState<Encoder[]>([
-    {
-      type: 'base64',
-    },
-  ]);
-
+const EncoderChain: React.FC<{
+  encoders: Encoder[];
+  setEncoders: (encoders: Encoder[]) => void;
+  numberOfEncoders: number;
+  setNumberOfEncoders: (numberOfEncoders: number) => void;
+  startingText: string;
+}> = ({
+  encoders,
+  setEncoders,
+  numberOfEncoders,
+  setNumberOfEncoders,
+  startingText,
+}) => {
   const EncoderComponent: React.FC<{
     text: string;
     numberRemaining: number;
@@ -188,6 +193,32 @@ const Encoder: NextPage = () => {
   };
 
   return (
+    <>
+      <div className="flex flex-col space-y-2">
+        <EncoderComponent
+          text={startingText}
+          numberRemaining={numberOfEncoders}
+        />
+      </div>
+      <button onClick={handleAddEncoder}>Add Encoder</button>
+    </>
+  );
+};
+
+const Encoder: NextPage = () => {
+  const [text, setText] = useState('');
+  const [chainsNumberOfEncoders, setChainsNumberOfEncoders] = useState<
+    number[]
+  >([0]);
+  const [chainsEncoders, setChainsEncoders] = useState<Encoder[][]>([
+    [
+      {
+        type: 'base64',
+      },
+    ],
+  ]);
+
+  return (
     <Layout title="Encoder" description="Encode text.">
       <textarea
         id="text"
@@ -196,9 +227,48 @@ const Encoder: NextPage = () => {
         onChange={(event) => setText(event.target.value)}
       />
       <div className="flex flex-col space-y-2">
-        <EncoderComponent text={text} numberRemaining={numberOfEncoders} />
+      {chainsEncoders.map((chainEncoders, chainIndex) => (
+        <div key={chainIndex} className="flex flex-col border rounded p-1">
+          <EncoderChain
+            encoders={chainEncoders}
+            setEncoders={(encoders) => {
+              const newChainsEncoders = [...chainsEncoders];
+              newChainsEncoders[chainIndex] = encoders;
+              setChainsEncoders(newChainsEncoders);
+            }}
+            numberOfEncoders={chainsNumberOfEncoders[chainIndex] || 0}
+            setNumberOfEncoders={(numberOfEncoders) => {
+              const newChainsNumberOfEncoders = [...chainsNumberOfEncoders];
+              newChainsNumberOfEncoders[chainIndex] = numberOfEncoders;
+              setChainsNumberOfEncoders(newChainsNumberOfEncoders);
+            }}
+            startingText={text}
+          />
+          {chainsEncoders.length > 1 && (
+            <button
+              onClick={() => {
+                const newChainsEncoders = [...chainsEncoders];
+                newChainsEncoders.splice(chainIndex, 1);
+                setChainsEncoders(newChainsEncoders);
+                const newChainsNumberOfEncoders = [...chainsNumberOfEncoders];
+                newChainsNumberOfEncoders.splice(chainIndex, 1);
+                setChainsNumberOfEncoders(newChainsNumberOfEncoders);
+              }}
+            >
+              Remove Chain
+            </button>
+          )}
+        </div>
+      ))}
+      <button
+        onClick={() => {
+          setChainsEncoders([...chainsEncoders, [{ type: 'base64' }]]);
+          setChainsNumberOfEncoders([...chainsNumberOfEncoders, 0]);
+        }}
+      >
+        Add Chain
+        </button>
       </div>
-      <button onClick={handleAddEncoder}>Add Encoder</button>
     </Layout>
   );
 };
