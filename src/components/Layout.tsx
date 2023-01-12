@@ -5,9 +5,15 @@ type LayoutProps = {
   children: React.ReactNode;
   title: string;
   description: string;
+  hideUi?: boolean;
 };
 
-const Layout: React.FC<LayoutProps> = ({ children, title, description }) => {
+const Layout: React.FC<LayoutProps> = ({
+  children,
+  title,
+  description,
+  hideUi,
+}) => {
   return (
     <>
       <Head>
@@ -40,21 +46,25 @@ const Layout: React.FC<LayoutProps> = ({ children, title, description }) => {
         />
       </Head>
       <main className="mx-auto min-h-screen justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] p-4 text-blue-400 antialiased">
-        <header className="top-0 z-50 mb-4 flex place-content-between">
-          <span className="font-bold">{title}</span>
-          <Link href="/" className="border px-1 hover:text-blue-600">
-            Home
-          </Link>
-        </header>
+        {!hideUi && (
+          <header className="top-0 z-50 mb-4 flex place-content-between">
+            <span className="font-bold">{title}</span>
+            <Link href="/" className="border px-1 hover:text-blue-600">
+              Home
+            </Link>
+          </header>
+        )}
         {children}
-        <footer className="flex justify-center">
-          <Link
-            className="pr-2 underline"
-            href="https://github.com/tonyaellie/tonya-utils"
-          >
-            {`© Copyright ${new Date().getFullYear()} Tonya's Utils Contributors`}
-          </Link>
-        </footer>
+        {!hideUi && (
+          <footer className="flex justify-center">
+            <Link
+              className="pr-2 underline"
+              href="https://github.com/tonyaellie/tonya-utils"
+            >
+              {`© Copyright ${new Date().getFullYear()} Tonya's Utils Contributors`}
+            </Link>
+          </footer>
+        )}
       </main>
     </>
   );

@@ -8,7 +8,7 @@ import Layout from '../../components/Layout';
 
 const Countdown: NextPage = () => {
   const router = useRouter();
-  const { date } = router.query;
+  const { date, hideui, fullscreen } = router.query;
 
   const [countdown, setCountdown] = useState('Loading...');
 
@@ -58,13 +58,19 @@ const Countdown: NextPage = () => {
 
   // TODO: make big and centred
   // TODO: add button to hide all layout elements
-  // TODO: add full screen button
+  // TODO: add full screen work
   // TODO: make countdown date?
 
   return (
-    <Layout title="Countdown" description="Counts down to a specified date.">
-      {countdown}
-      {countdown === '' && <Fireworks className="absolute inset-0" />}
+    <Layout
+      title="Countdown"
+      description="Counts down to a specified date."
+      hideUi={!!hideui}
+    >
+      <div className="p-64 text-center text-5xl">
+        {countdown}
+        {countdown === '' && <Fireworks className="absolute inset-0" />}
+      </div>
     </Layout>
   );
 };
