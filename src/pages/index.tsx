@@ -31,6 +31,7 @@ const Home: NextPage = () => {
         <CustomLink name="TTTime" />
         <CustomLink name="UCAS" />
         <CustomLink name="countdown" />
+        <CustomLink name="passwords" />
       </div>
     </Layout>
   );

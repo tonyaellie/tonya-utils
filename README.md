@@ -9,6 +9,8 @@ A collection of utility functions and tools. Hosted at https://utils.tokia.dev/.
 - [Encoder](https://utils.tokia.dev/encoder): A tool for encoding a given piece of text.
 - [TTTime](https://utils.tokia.dev/tttime): A clock that displays the current TTTime.
 - [UCAS](https://utils.tokia.dev/ucas): A tool for calculating UCAS points from A-level grades.
+- [Countdown](https://utils.tokia.dev/countdown): A tool for creating countdowns.
+- [Passwords](https://utils.tokia.dev/passwords): A tool for generating secure passwords.
 
 ## Planned Utils
 
@@ -17,13 +19,18 @@ A collection of utility functions and tools. Hosted at https://utils.tokia.dev/.
 - Randomizer: A tool for generating random numbers, strings, and other data.
 - QR Code Generator: A tool for generating QR codes from a given piece of text.
 - Reader: A tool for reading a given piece of text aloud.
-- Password Generator: A tool for generating secure passwords.
+- Request Sender: A tool for sending HTTP requests.
+- Formatter: A tool for formatting JSON/XML/HTML/CSS/JavaScript.
+- Team Generator: A tool for generating teams from a given list of names.
+- Timer: A tool for creating timers.
+- Stopwatch: A tool for creating stopwatches.
+- Quadratic Solver: A tool for solving quadratic equations (possibly with complex numbers and higher degree polynomials).
+- Distribution Calculator: A tool for calculating the distribution of a given set of numbers (binomial, geometric, negative binomial, poison, etc).
+
+## Utils that probably need a server/database
 - YouTube Downloader: A tool for downloading YouTube videos.
 - URL Shortener: A tool for shortening URLs.
 - Request Catcher: A tool for catching HTTP requests.
-- Formatter: A tool for formatting JSON/XML/HTML/CSS/JavaScript.
-- Team Generator: A tool for generating teams from a given list of names.
-- Countdown Timer: A tool for creating countdown timers.
 
 ## Issues and Contributing
 
