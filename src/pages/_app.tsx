@@ -8,11 +8,7 @@ import '../styles/globals.css';
 // const virgil = localFont({ src: '../styles/Virgil.woff2', variable: '--font-virgil' });
 
 const MyApp: AppType = ({ Component, pageProps }) => {
-  return (
-    // <main className={`${virgil.variable} font-virgil`}>
-      <Component {...pageProps} />
-    // </main>
-  );
+  return <Component {...pageProps} />;
 };
 
 export default trpc.withTRPC(MyApp);

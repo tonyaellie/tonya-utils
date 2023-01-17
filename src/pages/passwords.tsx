@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import { toast } from 'react-toastify';
+
 import Layout from '../components/Layout';
 
 const getRandom = (arr: string) => {
@@ -65,11 +67,11 @@ const Passwords = () => {
       <div>
         {passwords.map((password, index) => (
           <div
-            className='hover:text-blue-600 cursor-pointer'
+            className="cursor-pointer hover:text-blue-600"
             key={index}
             onClick={async () => {
               await navigator.clipboard.writeText(password);
-              alert('Copied to clipboard!');
+              toast.success('Copied to clipboard!');
             }}
           >
             {password}

@@ -1,5 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -45,16 +47,18 @@ const Layout: React.FC<LayoutProps> = ({
           src="/ingest/js/script.js"
         />
       </Head>
-      <main className="mx-auto min-h-screen justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] p-4 text-blue-400 antialiased">
+      <ToastContainer position={toast.POSITION.TOP_RIGHT} theme="dark" />
+      <div className="mx-auto min-h-screen justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] p-4 text-blue-400 antialiased">
         {!hideUi && (
-          <header className="top-0 z-50 mb-4 flex place-content-between">
-            <span className="font-bold">{title}</span>
-            <Link href="/" className="border px-1 hover:text-blue-600">
+          <header className="top-0 z-50 mb-4">
+            <Link href="/" className="border p-1 hover:text-blue-600">
               Home
             </Link>
+            <span className="px-1" />
+            <span className="p-1 font-bold">{title}</span>
           </header>
         )}
-        {children}
+        <main>{children}</main>
         {!hideUi && (
           <footer className="flex justify-center">
             <Link
@@ -65,7 +69,7 @@ const Layout: React.FC<LayoutProps> = ({
             </Link>
           </footer>
         )}
-      </main>
+      </div>
     </>
   );
 };
