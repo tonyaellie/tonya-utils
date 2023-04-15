@@ -2,6 +2,7 @@ import type { Dispatch, SetStateAction } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 
+import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { type NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { z } from 'zod';
@@ -170,6 +171,8 @@ const Ucas: NextPage = () => {
     { name: 'Choose a qualification', value: 0, id: 'choose' },
   ]);
 
+  const [animationParent] = useAutoAnimate();
+
   useEffect(() => {
     if (router.query.data) {
       try {
@@ -190,14 +193,16 @@ const Ucas: NextPage = () => {
 
   return (
     <Layout title="UCAS Calculator" description="Calculate UCAS points.">
-      {qualifications.map((qualification, index) => (
-        <QualificationBox
-          qualifications={qualifications}
-          setQualifications={setQualifications}
-          position={index}
-          key={index}
-        />
-      ))}
+      <div ref={animationParent}>
+        {qualifications.map((qualification, index) => (
+          <QualificationBox
+            qualifications={qualifications}
+            setQualifications={setQualifications}
+            position={index}
+            key={index}
+          />
+        ))}
+      </div>
       <button
         onClick={() => {
           setQualifications([
