@@ -1,7 +1,10 @@
 import { type NextPage } from 'next';
 import Link from 'next/link';
 
-import Layout from '../components/Layout';
+export const metadata = {
+  title: 'Home',
+  description: 'Home my utils.',
+};
 
 // TODO: make look good
 
@@ -22,7 +25,7 @@ const CustomLink: React.FC<CustomLinkProps> = ({ name }) => {
 
 const Home: NextPage = () => {
   return (
-    <Layout title="Home" description="Home my utils.">
+    <>
       <h1>Some utils I use:</h1>
       <div className="flex flex-col">
         <CustomLink name="counter" />
@@ -33,7 +36,7 @@ const Home: NextPage = () => {
         <CustomLink name="countdown" />
         <CustomLink name="passwords" />
       </div>
-    </Layout>
+    </>
   );
 };
 

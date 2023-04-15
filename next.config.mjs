@@ -15,6 +15,9 @@ const config = {
   },
   optimizeFonts: true,
   runtime: 'experimental-edge',
+  experimental: {
+    appDir: true,
+  },
   rewrites: async () => {
     return [
       {

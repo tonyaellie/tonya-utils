@@ -1,8 +1,13 @@
+'use client';
+
 import { useMemo, useState } from 'react';
 
 import { type NextPage } from 'next';
 
-import Layout from '../components/Layout';
+// export const metadata = {
+//   title: 'Counter',
+//   description: 'Count stuff in text.',
+// };
 
 const Counter: NextPage = () => {
   const [text, setText] = useState('');
@@ -18,7 +23,7 @@ const Counter: NextPage = () => {
   }, [text]);
 
   return (
-    <Layout title="Counter" description="Count stuff in text.">
+    <>
       <textarea
         value={text}
         onChange={(e) => setText(e.target.value)}
@@ -32,7 +37,7 @@ const Counter: NextPage = () => {
           // TODO: add individual word count and character count
         }
       </div>
-    </Layout>
+    </>
   );
 };
 
