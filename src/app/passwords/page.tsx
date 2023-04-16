@@ -1,16 +1,16 @@
-import Counter from './Counter';
+import Passwords from './Passwords';
 
 // export const metadata = {
 //   title: 'Counter',
 //   description: 'Count stuff in text.',
 // };
 
-const CounterPage = () => {
+const PasswordPage = () => {
   return (
     <>
-      <Counter />
+      <Passwords />
     </>
   );
 };
 
-export default CounterPage;
+export default PasswordPage;

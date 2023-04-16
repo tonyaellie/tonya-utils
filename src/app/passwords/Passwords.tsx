@@ -1,8 +1,8 @@
-import { useState } from 'react';
+'use client';
+
+import { useEffect, useState } from 'react';
 
 import { toast } from 'react-toastify';
-
-import Layout from '../components/Layout';
 
 const getRandom = (arr: string) => {
   return arr[Math.floor(Math.random() * arr.length)];
@@ -49,19 +49,27 @@ const generatePassword = () => {
 const Passwords = () => {
   const [passwords, setPasswords] = useState<string[]>([]);
 
+  const generatePasswords = () => {
+    const newPasswords: string[] = [];
+    for (let i = 0; i < 10; i++) {
+      newPasswords.push(generatePassword());
+    }
+    setPasswords(newPasswords);
+  };
+
+  useEffect(() => {
+    generatePasswords();
+  }, []);
+
   return (
-    <Layout title="Passwords" description="Password generator">
+    <>
       <button
         className="rounded border border-blue-400 p-2 hover:text-blue-600 "
         onClick={() => {
-          const newPasswords: string[] = [];
-          for (let i = 0; i < 10; i++) {
-            newPasswords.push(generatePassword());
-          }
-          setPasswords(newPasswords);
+          generatePasswords();
         }}
       >
-        Generate Passwords
+        Generate New Passwords
       </button>
       <div className="py-2" />
       <div>
@@ -78,7 +86,7 @@ const Passwords = () => {
           </div>
         ))}
       </div>
-    </Layout>
+    </>
   );
 };
 

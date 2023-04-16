@@ -16,7 +16,7 @@ const CustomLink: React.FC<CustomLinkProps> = ({ name }) => {
   return (
     <Link
       href={`/${name.toLocaleLowerCase()}`}
-      className="capitalize underline hover:text-blue-600"
+      className="border-t border-primary-500 px-2 py-1 capitalize hover:bg-primary-500 hover:text-amethyst-1"
     >
       {name}
     </Link>
@@ -26,8 +26,8 @@ const CustomLink: React.FC<CustomLinkProps> = ({ name }) => {
 const Home: NextPage = () => {
   return (
     <>
-      <h1>Some utils I use:</h1>
-      <div className="flex flex-col">
+      <div className="flex w-48 flex-col rounded border border-primary-500">
+        <span className="px-2 py-1 font-bold">Utils:</span>
         <CustomLink name="counter" />
         <CustomLink name="diff" />
         <CustomLink name="encoder" />

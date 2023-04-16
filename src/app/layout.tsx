@@ -3,6 +3,13 @@ import Link from 'next/link';
 import Toastify from './Toastify';
 
 import '../styles/globals.css';
+import 'react-toastify/dist/ReactToastify.css';
+
+// TODO: pull from url?
+export const metadata = {
+  title: 'Home',
+  description: 'Home my utils.',
+};
 
 const RootLayout = ({
   // Layouts must accept a children prop.
@@ -11,33 +18,30 @@ const RootLayout = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const hideUi = false;
-
   return (
     <html lang="en" style={{ colorScheme: 'dark' }}>
-      <body>
+      <body className="bg-amethyst-1 text-primary-500">
         <Toastify />
-        <div className="mx-auto min-h-screen justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] p-4 text-blue-400 antialiased">
-          {!hideUi && (
-            <header className="top-0 z-50 mb-4">
-              <Link href="/" className="border p-1 hover:text-blue-600">
-                Home
-              </Link>
-              <span className="px-1" />
-              <span className="p-1 font-bold">{'TODO: REPLACE ME'}</span>
-            </header>
-          )}
-          <main>{children}</main>
-          {!hideUi && (
-            <footer className="flex justify-center">
-              <Link
-                className="pr-2 underline"
-                href="https://github.com/tonyaellie/tonya-utils"
-              >
-                {`© Copyright ${new Date().getFullYear()} Tonya's Utils Contributors`}
-              </Link>
-            </footer>
-          )}
+        <div className="mx-auto min-h-screen justify-center antialiased">
+          <header className="top-0 z-50 bg-amethyst-2 p-4">
+            <Link
+              href="/"
+              className="rounded bg-primary-500 p-1 text-amethyst-2 hover:bg-primary-600"
+            >
+              Home
+            </Link>
+            <span className="px-1" />
+            <span className="p-1 font-bold">{'TODO: REPLACE ME'}</span>
+          </header>
+          <main className="px-4 pt-4">{children}</main>
+          <footer className="absolute bottom-0 left-0 right-0 flex justify-center">
+            <Link
+              className="pr-2 underline"
+              href="https://github.com/tonyaellie/tonya-utils"
+            >
+              {`© Copyright ${new Date().getFullYear()} Tonya's Utils Contributors`}
+            </Link>
+          </footer>
         </div>
       </body>
     </html>
