@@ -62,31 +62,28 @@ const Passwords = () => {
   }, []);
 
   return (
-    <>
+    <div className="flex w-56 flex-col rounded border border-primary-500">
       <button
-        className="rounded border border-blue-400 p-2 hover:text-blue-600 "
+        className="border-primary-500 py-2 hover:bg-primary-500 hover:text-amethyst-1"
         onClick={() => {
           generatePasswords();
         }}
       >
         Generate New Passwords
       </button>
-      <div className="py-2" />
-      <div>
-        {passwords.map((password, index) => (
-          <div
-            className="cursor-pointer hover:text-blue-600"
-            key={index}
-            onClick={async () => {
-              await navigator.clipboard.writeText(password);
-              toast.success('Copied to clipboard!');
-            }}
-          >
-            {password}
-          </div>
-        ))}
-      </div>
-    </>
+      {passwords.map((password, index) => (
+        <button
+          className="border-t border-primary-500 py-2 hover:bg-primary-500 hover:text-amethyst-1"
+          key={index}
+          onClick={async () => {
+            await navigator.clipboard.writeText(password);
+            toast.success('Copied to clipboard!');
+          }}
+        >
+          {password}
+        </button>
+      ))}
+    </div>
   );
 };
 
