@@ -1,4 +1,4 @@
-// import localFont from '@next/font/local';
+// import localFont from 'next/font/local';
 import { type AppType } from 'next/app';
 
 import { trpc } from '../utils/trpc';

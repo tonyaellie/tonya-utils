@@ -14,7 +14,7 @@ const config = {
     defaultLocale: 'en',
   },
   optimizeFonts: true,
-  runtime: 'experimental-edge',
+  // runtime: 'experimental-edge', // broken
   experimental: {
     appDir: true,
   },

@@ -5,12 +5,6 @@ import Toastify from './Toastify';
 import '../styles/globals.css';
 import 'react-toastify/dist/ReactToastify.css';
 
-// TODO: pull from url?
-export const metadata = {
-  title: 'Home',
-  description: 'Home my utils.',
-};
-
 const RootLayout = ({
   // Layouts must accept a children prop.
   // This will be populated with nested layouts or pages
@@ -30,8 +24,6 @@ const RootLayout = ({
             >
               Home
             </Link>
-            <span className="px-1" />
-            <span className="p-1 font-bold">{'TODO: REPLACE ME'}</span>
           </header>
           <main className="px-4 pt-4">{children}</main>
           <footer className="absolute bottom-0 left-0 right-0 flex justify-center">
