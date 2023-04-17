@@ -36,6 +36,7 @@ const RootLayout = ({
           <main className="px-4 pt-4">{children}</main>
           <footer className="absolute bottom-0 left-0 right-0 flex justify-center">
             <Link
+              // make this be at bottom of scroll or bottom of screen whichever is lower
               className="pr-2 underline"
               href="https://github.com/tonyaellie/tonya-utils"
             >

@@ -64,7 +64,7 @@ const Passwords = () => {
   return (
     <div className="flex w-56 flex-col rounded border border-primary-500">
       <button
-        className="border-primary-500 py-2 hover:bg-primary-500 hover:text-amethyst-1"
+        className="border-primary-500 py-2 hover:bg-red-600 hover:text-amethyst-1"
         onClick={() => {
           generatePasswords();
         }}
