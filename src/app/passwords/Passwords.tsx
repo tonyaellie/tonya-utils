@@ -1,8 +1,8 @@
-import { useState } from 'react';
+'use client';
+
+import { useEffect, useState } from 'react';
 
 import { toast } from 'react-toastify';
-
-import Layout from '../components/Layout';
 
 const getRandom = (arr: string) => {
   return arr[Math.floor(Math.random() * arr.length)];
@@ -49,36 +49,41 @@ const generatePassword = () => {
 const Passwords = () => {
   const [passwords, setPasswords] = useState<string[]>([]);
 
+  const generatePasswords = () => {
+    const newPasswords: string[] = [];
+    for (let i = 0; i < 10; i++) {
+      newPasswords.push(generatePassword());
+    }
+    setPasswords(newPasswords);
+  };
+
+  useEffect(() => {
+    generatePasswords();
+  }, []);
+
   return (
-    <Layout title="Passwords" description="Password generator">
+    <div className="flex w-56 flex-col rounded border border-primary-500">
       <button
-        className="rounded border border-blue-400 p-2 hover:text-blue-600 "
+        className="border-primary-500 py-2 hover:bg-red-600 hover:text-amethyst-1"
         onClick={() => {
-          const newPasswords: string[] = [];
-          for (let i = 0; i < 10; i++) {
-            newPasswords.push(generatePassword());
-          }
-          setPasswords(newPasswords);
+          generatePasswords();
         }}
       >
-        Generate Passwords
+        Generate New Passwords
       </button>
-      <div className="py-2" />
-      <div>
-        {passwords.map((password, index) => (
-          <div
-            className="cursor-pointer hover:text-blue-600"
-            key={index}
-            onClick={async () => {
-              await navigator.clipboard.writeText(password);
-              toast.success('Copied to clipboard!');
-            }}
-          >
-            {password}
-          </div>
-        ))}
-      </div>
-    </Layout>
+      {passwords.map((password, index) => (
+        <button
+          className="border-t border-primary-500 py-2 hover:bg-primary-500 hover:text-amethyst-1"
+          key={index}
+          onClick={async () => {
+            await navigator.clipboard.writeText(password);
+            toast.success('Copied to clipboard!');
+          }}
+        >
+          {password}
+        </button>
+      ))}
+    </div>
   );
 };
 

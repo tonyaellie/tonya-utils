@@ -26,6 +26,8 @@ A collection of utility functions and tools. Hosted at https://utils.tokia.dev/.
 - Stopwatch: A tool for creating stopwatches.
 - Quadratic Solver: A tool for solving quadratic equations (possibly with complex numbers and higher degree polynomials).
 - Distribution Calculator: A tool for calculating the distribution of a given set of numbers (binomial, geometric, negative binomial, poison, etc).
+- Colour: A tool for picking colours/viewer.
+- Unix Converter: A tool for converting between different unix times.
 
 ## Utils that probably need a server/database
 - YouTube Downloader: A tool for downloading YouTube videos.

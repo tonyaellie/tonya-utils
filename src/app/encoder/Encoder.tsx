@@ -1,11 +1,11 @@
+'use client';
+
 import crypto from 'crypto';
-import { text } from 'stream/consumers';
 
 import { useState, useMemo } from 'react';
 
+import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { type NextPage } from 'next';
-
-import Layout from '../components/Layout';
 
 type Encoder = {
   type: string;
@@ -94,7 +94,7 @@ const EncoderChain: React.FC<{
 
     return (
       <>
-        <div className="rounded border p-2">
+        <div className="rounded-lg border-2 border-primary-500 bg-amethyst-1 p-2">
           <div className="flex">
             <span>Encoding Type:</span>
             <span className="p-1" />
@@ -155,6 +155,8 @@ const EncoderChain: React.FC<{
             <div className="flex-1" />
             {numberOfEncoders > 0 && (
               <button
+                aria-label="Remove Encoder"
+                className="h-4 w-4 rounded-full border-2 border-red-500 hover:bg-red-500"
                 onClick={() => {
                   const newEncoderTypes = [...encoders];
                   newEncoderTypes.splice(
@@ -164,9 +166,7 @@ const EncoderChain: React.FC<{
                   setEncoders(newEncoderTypes);
                   setNumberOfEncoders(numberOfEncoders - 1);
                 }}
-              >
-                Remove
-              </button>
+              />
             )}
           </div>
           <span>Encoded:</span>
@@ -200,12 +200,19 @@ const EncoderChain: React.FC<{
           numberRemaining={numberOfEncoders}
         />
       </div>
-      <button onClick={handleAddEncoder}>Add Encoder</button>
+      <div className="h-2" />
+      <button
+        aria-label="Add chain"
+        className="h-4 w-full rounded-lg border-2 border-green-600 bg-amethyst-2 hover:bg-green-600"
+        onClick={handleAddEncoder}
+      />
     </>
   );
 };
 
 const Encoder: NextPage = () => {
+  const [animationParent] = useAutoAnimate();
+
   const [text, setText] = useState('');
   const [chainsNumberOfEncoders, setChainsNumberOfEncoders] = useState<
     number[]
@@ -219,57 +226,65 @@ const Encoder: NextPage = () => {
   ]);
 
   return (
-    <Layout title="Encoder" description="Encode text.">
+    <>
       <textarea
         id="text"
         value={text}
-        style={{ width: '100%', height: '100px' }}
+        className="h-32 w-full rounded-lg border-2 border-primary-500 bg-amethyst-2 p-4 focus:outline-none"
         onChange={(event) => setText(event.target.value)}
       />
-      <div className="flex flex-col space-y-2">
-      {chainsEncoders.map((chainEncoders, chainIndex) => (
-        <div key={chainIndex} className="flex flex-col border rounded p-1">
-          <EncoderChain
-            encoders={chainEncoders}
-            setEncoders={(encoders) => {
-              const newChainsEncoders = [...chainsEncoders];
-              newChainsEncoders[chainIndex] = encoders;
-              setChainsEncoders(newChainsEncoders);
-            }}
-            numberOfEncoders={chainsNumberOfEncoders[chainIndex] || 0}
-            setNumberOfEncoders={(numberOfEncoders) => {
-              const newChainsNumberOfEncoders = [...chainsNumberOfEncoders];
-              newChainsNumberOfEncoders[chainIndex] = numberOfEncoders;
-              setChainsNumberOfEncoders(newChainsNumberOfEncoders);
-            }}
-            startingText={text}
-          />
-          {chainsEncoders.length > 1 && (
-            <button
-              onClick={() => {
+      <div className="flex flex-col space-y-2" ref={animationParent}>
+        {chainsEncoders.map((chainEncoders, chainIndex) => (
+          <div
+            key={chainIndex}
+            className="flex flex-col rounded-lg border-2 border-primary-500 bg-primary-950 p-1"
+          >
+            <EncoderChain
+              encoders={chainEncoders}
+              setEncoders={(encoders) => {
                 const newChainsEncoders = [...chainsEncoders];
-                newChainsEncoders.splice(chainIndex, 1);
+                newChainsEncoders[chainIndex] = encoders;
                 setChainsEncoders(newChainsEncoders);
+              }}
+              numberOfEncoders={chainsNumberOfEncoders[chainIndex] || 0}
+              setNumberOfEncoders={(numberOfEncoders) => {
                 const newChainsNumberOfEncoders = [...chainsNumberOfEncoders];
-                newChainsNumberOfEncoders.splice(chainIndex, 1);
+                newChainsNumberOfEncoders[chainIndex] = numberOfEncoders;
                 setChainsNumberOfEncoders(newChainsNumberOfEncoders);
               }}
-            >
-              Remove Chain
-            </button>
-          )}
-        </div>
-      ))}
-      <button
-        onClick={() => {
-          setChainsEncoders([...chainsEncoders, [{ type: 'base64' }]]);
-          setChainsNumberOfEncoders([...chainsNumberOfEncoders, 0]);
-        }}
-      >
-        Add Chain
-        </button>
+              startingText={text}
+            />
+            {chainsEncoders.length > 1 && (
+              <>
+                <div className="h-2" />
+                <button
+                  aria-label="Remove chain"
+                  className="h-4 w-full rounded-lg border-2 border-red-600 bg-amethyst-2 hover:bg-red-600"
+                  onClick={() => {
+                    const newChainsEncoders = [...chainsEncoders];
+                    newChainsEncoders.splice(chainIndex, 1);
+                    setChainsEncoders(newChainsEncoders);
+                    const newChainsNumberOfEncoders = [
+                      ...chainsNumberOfEncoders,
+                    ];
+                    newChainsNumberOfEncoders.splice(chainIndex, 1);
+                    setChainsNumberOfEncoders(newChainsNumberOfEncoders);
+                  }}
+                />
+              </>
+            )}
+          </div>
+        ))}
+        <button
+          aria-label="Add chain"
+          className="h-4 w-full rounded-lg border-2 border-green-600 bg-amethyst-2 hover:bg-green-600"
+          onClick={() => {
+            setChainsEncoders([...chainsEncoders, [{ type: 'base64' }]]);
+            setChainsNumberOfEncoders([...chainsNumberOfEncoders, 0]);
+          }}
+        />
       </div>
-    </Layout>
+    </>
   );
 };
 

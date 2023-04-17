@@ -1,19 +1,21 @@
+'use client';
+
 import type { Dispatch, SetStateAction } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 
 import { useAutoAnimate } from '@formkit/auto-animate/react';
-import { type NextPage } from 'next';
-import { useRouter } from 'next/router';
+import { useSearchParams } from 'next/navigation';
+import { toast } from 'react-toastify';
 import { z } from 'zod';
-
-import Layout from '../components/Layout';
 
 type Qualification = {
   name: string;
   value: number;
   id: string;
 };
+
+// TODO: add option to save and have list of saved lists
 
 const allQualification = [
   { name: 'A Level A*', value: 56, id: 'a-level-a-star' },
@@ -103,6 +105,7 @@ const QualificationBox: React.FC<{
   return (
     <div className="flex">
       <select
+        className="bg-amethyst-2 focus:outline-none"
         value={qualifications[position]!.id}
         onChange={(e) => {
           const newQualifications = [...qualifications];
@@ -128,6 +131,7 @@ const QualificationBox: React.FC<{
       <div className="p-2" />
       {qualifications[position]!.id === 'custom' ? (
         <input
+          className="bg-amethyst-2 focus:outline-none"
           type="number"
           value={qualifications[position]!.value}
           onChange={(e) => {
@@ -165,8 +169,8 @@ const qualificationsSchema = z.array(
   })
 );
 
-const Ucas: NextPage = () => {
-  const router = useRouter();
+const Ucas = () => {
+  const params = useSearchParams();
   const [qualifications, setQualifications] = useState<Qualification[]>([
     { name: 'Choose a qualification', value: 0, id: 'choose' },
   ]);
@@ -174,9 +178,9 @@ const Ucas: NextPage = () => {
   const [animationParent] = useAutoAnimate();
 
   useEffect(() => {
-    if (router.query.data) {
+    if (params) {
       try {
-        const data = decodeURIComponent(router.query.data as string);
+        const data = params.get('data') || '[]';
 
         console.log(JSON.parse(data));
 
@@ -186,13 +190,13 @@ const Ucas: NextPage = () => {
 
         setQualifications(validatedData);
       } catch {
-        alert('Invalid data');
+        toast.error('Invalid data');
       }
     }
-  }, [router.query.data]);
+  }, [params]);
 
   return (
-    <Layout title="UCAS Calculator" description="Calculate UCAS points.">
+    <>
       <div ref={animationParent}>
         {qualifications.map((qualification, index) => (
           <QualificationBox
@@ -224,12 +228,12 @@ const Ucas: NextPage = () => {
                 : 'http://localhost:3000'
             }/ucas?data=${encodeURIComponent(JSON.stringify(qualifications))}`
           );
-          alert('Copied to clipboard');
+          toast.success('Copied to clipboard!');
         }}
       >
         Share
       </button>
-    </Layout>
+    </>
   );
 };
 
