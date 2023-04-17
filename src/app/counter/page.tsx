@@ -6,11 +6,7 @@ import Counter from './Counter';
 // };
 
 const CounterPage = () => {
-  return (
-    <>
-      <Counter />
-    </>
-  );
+  return <Counter />;
 };
 
 export default CounterPage;

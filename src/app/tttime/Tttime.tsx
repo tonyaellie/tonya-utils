@@ -1,8 +1,8 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 
 import { type NextPage } from 'next';
-
-import Layout from '../components/Layout';
 
 const TTTime: NextPage = () => {
   const [time, setTime] = useState('Loading...');
@@ -46,11 +46,7 @@ const TTTime: NextPage = () => {
     return () => clearInterval(interval);
   }, []);
 
-  return (
-    <Layout title="TTTime" description="Displays the current time in TTTime.">
-      <div className="p-64 text-center text-8xl">{time}</div>
-    </Layout>
-  );
+  return <div className="p-64 text-center text-8xl">{time}</div>;
 };
 
 export default TTTime;

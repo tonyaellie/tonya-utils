@@ -6,11 +6,7 @@ import Diff from './Diff';
 // };
 
 const DiffPage = () => {
-  return (
-    <>
-      <Diff />
-    </>
-  );
+  return <Diff />;
 };
 
 export default DiffPage;

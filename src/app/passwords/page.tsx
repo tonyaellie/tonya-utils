@@ -6,11 +6,7 @@ import Passwords from './Passwords';
 // };
 
 const PasswordPage = () => {
-  return (
-    <>
-      <Passwords />
-    </>
-  );
+  return <Passwords />;
 };
 
 export default PasswordPage;

@@ -25,18 +25,16 @@ const CustomLink: React.FC<CustomLinkProps> = ({ name }) => {
 
 const Home: NextPage = () => {
   return (
-    <>
-      <div className="flex w-48 flex-col rounded border border-primary-500">
-        <span className="px-2 py-1 font-bold">Utils:</span>
-        <CustomLink name="counter" />
-        <CustomLink name="diff" />
-        <CustomLink name="encoder" />
-        <CustomLink name="TTTime" />
-        <CustomLink name="UCAS" />
-        <CustomLink name="countdown" />
-        <CustomLink name="passwords" />
-      </div>
-    </>
+    <div className="flex w-48 flex-col rounded border border-primary-500">
+      <span className="px-2 py-1 font-bold">Utils:</span>
+      <CustomLink name="counter" />
+      <CustomLink name="diff" />
+      <CustomLink name="encoder" />
+      <CustomLink name="TTTime" />
+      <CustomLink name="UCAS" />
+      <CustomLink name="countdown" />
+      <CustomLink name="passwords" />
+    </div>
   );
 };
 
