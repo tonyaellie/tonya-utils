@@ -237,7 +237,7 @@ const Encoder: NextPage = () => {
         {chainsEncoders.map((chainEncoders, chainIndex) => (
           <div
             key={chainIndex}
-            className="flex flex-col rounded-lg border-2 border-primary-500 bg-amethyst-2 p-1"
+            className="flex flex-col rounded-lg border-2 border-primary-500 bg-primary-950 p-1"
           >
             <EncoderChain
               encoders={chainEncoders}
