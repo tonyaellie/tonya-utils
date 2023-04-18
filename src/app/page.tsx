@@ -34,6 +34,7 @@ const Home: NextPage = () => {
       <CustomLink name="UCAS" />
       <CustomLink name="countdown" />
       <CustomLink name="passwords" />
+      <CustomLink name="unix" />
     </div>
   );
 };
