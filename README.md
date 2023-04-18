@@ -11,6 +11,7 @@ A collection of utility functions and tools. Hosted at https://utils.tokia.dev/.
 - [UCAS](https://utils.tokia.dev/ucas): A tool for calculating UCAS points from A-level grades.
 - [Countdown](https://utils.tokia.dev/countdown): A tool for creating countdowns.
 - [Passwords](https://utils.tokia.dev/passwords): A tool for generating secure passwords.
+- [Unix](https://utils.tokia.dev/unix): A tool for converting from unix time to a human-readable date and time.
 
 ## Planned Utils
 
@@ -27,7 +28,6 @@ A collection of utility functions and tools. Hosted at https://utils.tokia.dev/.
 - Quadratic Solver: A tool for solving quadratic equations (possibly with complex numbers and higher degree polynomials).
 - Distribution Calculator: A tool for calculating the distribution of a given set of numbers (binomial, geometric, negative binomial, poison, etc).
 - Colour: A tool for picking colours/viewer.
-- Unix Converter: A tool for converting between different unix times.
 
 ## Utils that probably need a server/database
 - YouTube Downloader: A tool for downloading YouTube videos.
