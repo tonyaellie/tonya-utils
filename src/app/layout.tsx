@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import NextTopLoader from 'nextjs-toploader';
 
 import Toastify from './Toastify';
 
@@ -15,6 +16,7 @@ const RootLayout = ({
   return (
     <html lang="en" style={{ colorScheme: 'dark' }}>
       <body className="bg-amethyst-1 text-primary-500">
+        <NextTopLoader color="#fa3aa6" />
         <Toastify />
         <div className="mx-auto min-h-screen justify-center antialiased">
           <header className="top-0 z-50 bg-amethyst-2 p-4">
