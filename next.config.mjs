@@ -14,9 +14,9 @@ const config = {
     defaultLocale: 'en',
   },
   optimizeFonts: true,
-  // runtime: 'experimental-edge', // broken
   experimental: {
     appDir: true,
+    runtime: 'experimental-edge',
   },
   rewrites: async () => {
     return [
