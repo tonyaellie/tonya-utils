@@ -1,4 +1,4 @@
-name: Vercel Main URL Lighthouse Audit
+name: Vercel Commit URL Lighthouse Audit
 
 on:
   deployment_status
@@ -15,7 +15,7 @@ jobs:
         uses: treosh/lighthouse-ci-action@v9
         with:
           urls: |
-            https://utils.tokia.dev
+            ${{ github.event.deployment_status.environment_url }}
           uploadArtifacts: true
           temporaryPublicStorage: true
       - name: Format lighthouse score
