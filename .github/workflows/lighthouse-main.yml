@@ -1,11 +1,7 @@
 name: Vercel Main URL Lighthouse Audit
 
-name: Deploy to Production
-
 on:
-  deployment_status:
-    branches: [main]
-    types: [success]
+  deployment_status
 
 jobs:
   generate_lighthouse_audit:
