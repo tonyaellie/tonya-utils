@@ -1,4 +1,4 @@
-name: Vercel Commit URL Lighthouse Audit
+name: Commit Lighthouse Audit
 
 on:
   deployment_status
