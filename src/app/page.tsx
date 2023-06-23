@@ -35,6 +35,7 @@ const Home: NextPage = () => {
       <CustomLink name="countdown" />
       <CustomLink name="passwords" />
       <CustomLink name="unix" />
+      <CustomLink name="colour" />
     </div>
   );
 };
