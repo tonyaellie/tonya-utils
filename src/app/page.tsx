@@ -36,6 +36,7 @@ const Home: NextPage = () => {
       <CustomLink name="passwords" />
       <CustomLink name="unix" />
       <CustomLink name="colour" />
+      <CustomLink name="char" />
     </div>
   );
 };
