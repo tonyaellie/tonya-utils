@@ -37,6 +37,7 @@ const Home: NextPage = () => {
       <CustomLink name="unix" />
       <CustomLink name="colour" />
       <CustomLink name="char" />
+      <CustomLink name="case" />
     </div>
   );
 };

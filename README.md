@@ -14,6 +14,7 @@ A collection of utility functions and tools. Hosted at https://utils.tokia.dev/.
 - [Unix](https://utils.tokia.dev/unix): A tool for converting from unix time to a human-readable date and time.
 - [Colour](https://utils.tokia.dev/colour): A tool for picking colours/viewer.
 - [Char](https://utils.tokia.dev/char): A tool for getting the char at a given index in a string.
+- [Case](https://utils.tokia.dev/case): A tool for converting between different cases.
 
 ## Planned Utils
 
