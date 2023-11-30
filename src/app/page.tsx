@@ -15,7 +15,7 @@ type CustomLinkProps = {
 const CustomLink: React.FC<CustomLinkProps> = ({ name }) => {
   return (
     <Link
-      href={`/${name.toLocaleLowerCase()}`}
+      href={`/${name.replaceAll(' ', '').toLocaleLowerCase()}`}
       className="border-t border-primary-500 px-2 py-1 capitalize hover:bg-primary-500 hover:text-amethyst-1"
     >
       {name}
@@ -38,6 +38,7 @@ const Home: NextPage = () => {
       <CustomLink name="colour" />
       <CustomLink name="char" />
       <CustomLink name="case" />
+      <CustomLink name="image creator" />
     </div>
   );
 };
