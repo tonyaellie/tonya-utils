@@ -5,7 +5,6 @@ import { useState } from 'react';
 import { z } from 'zod';
 
 // TODO:
-//  - add support for greyscale
 //  - hotkeys
 //  - export and import?
 
@@ -15,12 +14,14 @@ const NumberInput = ({
   min,
   max,
   id,
+  hidden,
 }: {
   value: number;
   setValue: (value: number) => void;
   min?: number;
   max?: number;
   id: string;
+  hidden?: boolean;
 }) => {
   const [internalValue, setInternalValue] = useState(value.toString());
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,6 +45,7 @@ const NumberInput = ({
   };
   return (
     <input
+      hidden={hidden}
       id={id}
       type="text"
       value={internalValue}
@@ -53,9 +55,10 @@ const NumberInput = ({
   );
 };
 
-const CopyText = ({ text }: { text: string }) => {
+const CopyText = ({ text, hidden }: { text: string; hidden?: boolean }) => {
   return (
     <div
+      hidden={hidden}
       className="m-2 cursor-pointer break-words"
       onClick={() => {
         navigator.clipboard.writeText(text);
@@ -71,10 +74,10 @@ const getArea = (
   y: number,
   width: number,
   height: number,
-  image: boolean[][]
+  image: number[][]
 ) => {
   const area = Array.from({ length: height }, () =>
-    Array.from({ length: width }, () => false)
+    Array.from({ length: width }, () => 0)
   );
   for (let i = 0; i < height; i++) {
     for (let j = 0; j < width; j++) area[i]![j] = image[y + i]![x + j]!;
@@ -87,8 +90,8 @@ const pasteArea = (
   y: number,
   width: number,
   height: number,
-  area: boolean[][],
-  image: boolean[][]
+  area: number[][],
+  image: number[][]
 ) => {
   const newImage = image.map((row) => [...row]);
   for (let i = 0; i < height; i++) {
@@ -102,14 +105,14 @@ const rotateArea = (
   y: number,
   width: number,
   height: number,
-  image: boolean[][],
+  image: number[][],
   direction: 'left' | 'right'
 ) => {
   if (width !== height) return image;
 
   const area = getArea(x, y, width, height, image);
   const newArea = Array.from({ length: width }, () =>
-    Array.from({ length: height }, () => false)
+    Array.from({ length: height }, () => 0)
   );
   for (let i = 0; i < height; i++) {
     for (let j = 0; j < width; j++)
@@ -126,12 +129,12 @@ const flipArea = (
   y: number,
   width: number,
   height: number,
-  image: boolean[][],
+  image: number[][],
   direction: 'horizontal' | 'vertical'
 ) => {
   const area = getArea(x, y, width, height, image);
   const newArea = Array.from({ length: height }, () =>
-    Array.from({ length: width }, () => false)
+    Array.from({ length: width }, () => 0)
   );
   for (let i = 0; i < height; i++) {
     for (let j = 0; j < width; j++)
@@ -148,11 +151,11 @@ const clearArea = (
   y: number,
   width: number,
   height: number,
-  image: boolean[][]
+  image: number[][]
 ) => {
   const newImage = image.map((row) => [...row]);
   for (let i = 0; i < height; i++) {
-    for (let j = 0; j < width; j++) newImage[y + i]![x + j] = false;
+    for (let j = 0; j < width; j++) newImage[y + i]![x + j] = 0;
   }
   return newImage;
 };
@@ -162,12 +165,12 @@ const invertArea = (
   y: number,
   width: number,
   height: number,
-  image: boolean[][]
+  image: number[][]
 ) => {
   const newImage = image.map((row) => [...row]);
   for (let i = 0; i < height; i++) {
     for (let j = 0; j < width; j++)
-      newImage[y + i]![x + j] = !newImage[y + i]![x + j];
+      newImage[y + i]![x + j] = 255 - newImage[y + i]![x + j]!;
   }
   return newImage;
 };
@@ -177,22 +180,23 @@ const randomiseArea = (
   y: number,
   width: number,
   height: number,
-  image: boolean[][]
+  image: number[][]
 ) => {
   const newImage = image.map((row) => [...row]);
   for (let i = 0; i < height; i++) {
     for (let j = 0; j < width; j++)
-      newImage[y + i]![x + j] = Math.random() > 0.5;
+      newImage[y + i]![x + j] = Math.random() > 0.5 ? 255 : 0;
   }
   return newImage;
 };
 
+// TODO: add greyScale option so line is not as harsh
 const drawLine = (
   startX: number,
   startY: number,
   endX: number,
   endY: number,
-  image: boolean[][]
+  image: number[][]
 ) => {
   const newImage = image.map((row) => [...row]);
   const dx = Math.abs(endX - startX);
@@ -202,7 +206,7 @@ const drawLine = (
   let err = dx - dy;
 
   while (true) {
-    newImage[startY]![startX] = true;
+    newImage[startY]![startX] = 255;
     if (startX === endX && startY === endY) break;
     const e2 = 2 * err;
     if (e2 > -dy) {
@@ -223,7 +227,7 @@ const drawRectangle = (
   startY: number,
   endX: number,
   endY: number,
-  image: boolean[][]
+  image: number[][]
 ) => {
   const newImage = image.map((row) => [...row]);
   const width = Math.abs(endX - startX);
@@ -234,7 +238,7 @@ const drawRectangle = (
   for (let i = 0; i < height; i++) {
     for (let j = 0; j < width; j++) {
       if (i === 0 || i === height - 1 || j === 0 || j === width - 1)
-        newImage[y + i]![x + j] = true;
+        newImage[y + i]![x + j] = 255;
     }
   }
 
@@ -246,7 +250,8 @@ const drawCircle = (
   startY: number,
   endX: number,
   endY: number,
-  image: boolean[][]
+  image: number[][],
+  greyScale: boolean
 ) => {
   const newImage = image.map((row) => [...row]);
   const width = Math.abs(endX - startX) - 1;
@@ -267,8 +272,13 @@ const drawCircle = (
         Math.pow(centerX - j, 2) + Math.pow(centerY - i, 2)
       );
 
-      if (Math.abs(distanceToCenter - radius) < 0.5) {
-        newImage[i]![j] = true;
+      if (Math.abs(distanceToCenter - radius) < (greyScale ? 0.8 : 0.5)) {
+        if (greyScale) {
+          newImage[i]![j] =
+            255 - Math.floor(Math.abs(distanceToCenter - radius) * 255);
+        } else {
+          newImage[i]![j] = 255;
+        }
       }
     }
   }
@@ -279,9 +289,9 @@ const drawCircle = (
 const fillFromPoint = (
   x: number,
   y: number,
-  image: boolean[][],
-  originalColor: boolean,
-  newColor: boolean
+  image: number[][],
+  originalColor: number,
+  newColor: number
 ) => {
   const newImage = image.map((row) => [...row]);
   if (newImage[y]![x] !== originalColor) return newImage;
@@ -315,7 +325,7 @@ const ImageCreator = () => {
     y: number;
     width: number;
     height: number;
-    image: boolean[][];
+    image: number[][];
   }>();
   const [pasteStarted, setPasteStarted] = useState(false);
   const [lineStart, setLineStart] = useState<{
@@ -341,14 +351,16 @@ const ImageCreator = () => {
 
   const [image, setImage] = useState(() => {
     const initialStates = Array.from({ length: height }, () =>
-      Array.from({ length: width }, () => false)
+      Array.from({ length: width }, () => 0)
     );
     return initialStates;
   });
-  const [history, setHistory] = useState<boolean[][][]>([image]);
+  const [history, setHistory] = useState<number[][][]>([image]);
   const [historyIndex, setHistoryIndex] = useState(0); // counted backwards, the higher the number the further back in history
   const [name, setName] = useState('');
   const [selectedSavedImage, setSelectedSavedImage] = useState<string>();
+  const [greyScale, setGreyScale] = useState(false);
+  const [currentColour, setCurrentColour] = useState(0); // 0 = black, 255 = white
 
   const saveImage = () => {
     if (
@@ -365,6 +377,7 @@ const ImageCreator = () => {
         offSetX,
         offSetY,
         image,
+        greyScale,
       })
     );
   };
@@ -389,7 +402,8 @@ const ImageCreator = () => {
         width: z.number(),
         offSetX: z.number(),
         offSetY: z.number(),
-        image: z.array(z.array(z.boolean())),
+        image: z.array(z.array(z.number().min(0).max(255))),
+        greyScale: z.boolean(),
       })
       .safeParse(parsedImage);
 
@@ -405,10 +419,11 @@ const ImageCreator = () => {
     setOffSetY(data.data.offSetY);
     setImage(data.data.image);
     setHistory([data.data.image]);
+    setGreyScale(data.data.greyScale);
     setName(selectedSavedImage);
   };
 
-  const addHistory = (newImage: boolean[][]) => {
+  const addHistory = (newImage: number[][]) => {
     if (historyIndex !== 0) {
       setHistory(history.slice(historyIndex));
       setHistoryIndex(0);
@@ -467,7 +482,7 @@ const ImageCreator = () => {
       currentHoveredPixel.x,
       currentHoveredPixel.y,
       Array.from({ length: height }, () =>
-        Array.from({ length: width }, () => false)
+        Array.from({ length: width }, () => 0)
       )
     );
     return pendingLine[y]![x];
@@ -485,7 +500,12 @@ const ImageCreator = () => {
   const setHeightChanges = (newHeight: number) => {
     if (newHeight < height) {
       for (let i = 0; i < height - newHeight; i++) {
-        if (image[newHeight + i]?.includes(true)) return;
+        if (
+          image[newHeight + i]
+            // check if any pixels bigger than 0
+            ?.reduce((acc, curr) => acc + curr, 0) !== 0
+        )
+          return;
         if (
           selection &&
           selection.width &&
@@ -501,7 +521,7 @@ const ImageCreator = () => {
         return [
           ...prevImage,
           ...Array.from({ length: newHeight - height }, () =>
-            Array.from({ length: width }, () => false)
+            Array.from({ length: width }, () => 0)
           ),
         ];
       }
@@ -514,7 +534,7 @@ const ImageCreator = () => {
     if (newWidth < width) {
       for (let i = 0; i < height; i++) {
         for (let j = 0; j < width - newWidth; j++) {
-          if (image[i]![newWidth + j]) return;
+          if (image[i]![newWidth + j] !== 0) return;
           if (
             selection &&
             selection.width &&
@@ -530,7 +550,7 @@ const ImageCreator = () => {
       if (newWidth > width) {
         return prevImage.map((row) => [
           ...row,
-          ...Array.from({ length: newWidth - width }, () => false),
+          ...Array.from({ length: newWidth - width }, () => 0),
         ]);
       }
       return addHistory(prevImage.map((row) => row.slice(0, newWidth)));
@@ -572,6 +592,54 @@ const ImageCreator = () => {
           setValue={setOffSetY}
           min={-height}
           max={height}
+        />
+
+        <label htmlFor="greyScale">Greyscale:</label>
+        <input
+          id="greyScale"
+          type="checkbox"
+          checked={greyScale}
+          onChange={(e) => {
+            if (e.target.checked) {
+              setGreyScale(true);
+            } else {
+              // check that there are no pixels with a value other than 0 or 255
+              if (
+                image
+                  .map((row) => row.filter((col) => col !== 0 && col !== 255))
+                  .filter((row) => row.length > 0).length > 0
+              ) {
+                if (
+                  confirm(
+                    'This will convert all pixels that are not 0 or 255 to 255. Are you sure you want to continue?'
+                  )
+                ) {
+                  setImage(
+                    image.map((row) =>
+                      row.map((col) => (col === 0 || col === 255 ? col : 255))
+                    )
+                  );
+                  setGreyScale(false);
+                } else {
+                  return;
+                }
+              }
+              setGreyScale(false);
+            }
+          }}
+          className="rounded-md border-2 px-1 accent-primary-500"
+        />
+
+        <label hidden={!greyScale} htmlFor="colour">
+          Colour:
+        </label>
+        <NumberInput
+          hidden={!greyScale}
+          id="colour"
+          value={currentColour}
+          setValue={setCurrentColour}
+          min={0}
+          max={255}
         />
 
         <select
@@ -896,12 +964,15 @@ const ImageCreator = () => {
                     selection.y,
                     selection.x + selection.width,
                     selection.y + selection.height,
-                    image
+                    image,
+                    greyScale
                   )
                 )
               );
             } else {
-              setImage(addHistory(drawCircle(0, 0, width, height, image)));
+              setImage(
+                addHistory(drawCircle(0, 0, width, height, image, greyScale))
+              );
             }
           }}
           className="rounded-md border-2 border-primary-500 px-2"
@@ -971,9 +1042,18 @@ const ImageCreator = () => {
                 onMouseLeave={() => {
                   setCurrentHoveredPixel(undefined);
                 }}
+                style={{
+                  backgroundColor: greyScale
+                    ? `rgb(${image[i]![j]}, ${image[i]![j]}, ${image[i]![j]})`
+                    : undefined,
+                }}
                 key={`${i}-${j}`}
                 className={`h-8 w-8 border-2 ${
-                  image[i]![j] ? 'bg-primary-500' : 'bg-gray-800'
+                  greyScale
+                    ? ''
+                    : image[i]![j]
+                    ? 'bg-primary-500'
+                    : 'bg-gray-800'
                 } ${
                   currentHoveredPixel?.x === j &&
                   currentHoveredPixel?.y === i &&
@@ -1005,7 +1085,7 @@ const ImageCreator = () => {
                   id={`${i}-${j}-checkbox`}
                   type="checkbox"
                   hidden
-                  checked={image[i]![j]}
+                  checked={image[i]![j] === 255}
                   onChange={() => {
                     if (selectionStarted) {
                       if (!selection) {
@@ -1051,7 +1131,11 @@ const ImageCreator = () => {
                             i,
                             image,
                             image[i]![j]!,
-                            !image[i]![j]
+                            greyScale
+                              ? currentColour
+                              : image[i]![j] === 255
+                              ? 0
+                              : 255
                           )
                         )
                       );
@@ -1088,7 +1172,11 @@ const ImageCreator = () => {
                       if (rowIndex !== i) return row;
                       return row.map((col, colIndex) => {
                         if (colIndex !== j) return col;
-                        return !col;
+                        return greyScale
+                          ? currentColour
+                          : col === 255
+                          ? 0
+                          : 255;
                       });
                     });
                     setImage(addHistory(newImage));
@@ -1101,13 +1189,17 @@ const ImageCreator = () => {
       </div>
 
       <CopyText
+        text="uBit.display.setDisplayMode(DISPLAY_MODE_GREYSCALE);"
+        hidden={!greyScale}
+      />
+      <CopyText
         text={`MicroBitImage myImage("${image
-          .map((row) => row.map((col) => (col ? '255' : '0')).join(','))
+          .map((row) => row.join(','))
           .join('\\n')}\\n");`}
       />
       <CopyText
         text={`const uint8_t myImageData[] = {${image
-          .map((row) => row.map((col) => (col ? '255' : '0')).join(','))
+          .map((row) => row.join(','))
           .join(',')}};`}
       />
       <CopyText
