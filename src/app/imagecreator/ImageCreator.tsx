@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { z } from 'zod';
 
@@ -362,6 +362,13 @@ const ImageCreator = () => {
   const [greyScale, setGreyScale] = useState(false);
   const [currentColour, setCurrentColour] = useState(0); // 0 = black, 255 = white
 
+  const [localStorageKeys, setLocalStorageKeys] = useState<string[]>([]);
+
+  useEffect(() => {
+    const keys = Object.keys(localStorage);
+    setLocalStorageKeys(keys);
+  }, []);
+
   const saveImage = () => {
     if (
       localStorage.getItem(`savedImage-${name}`) &&
@@ -652,7 +659,7 @@ const ImageCreator = () => {
           <option hidden value="">
             Select Image
           </option>
-          {Object.keys(localStorage)
+          {localStorageKeys
             .filter((key) => key.includes('savedImage-'))
             .map((key) => key.replace('savedImage-', ''))
             .map((key) => (
