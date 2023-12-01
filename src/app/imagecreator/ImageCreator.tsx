@@ -196,6 +196,7 @@ const drawLine = (
   startY: number,
   endX: number,
   endY: number,
+  brightness: number,
   image: number[][]
 ) => {
   const newImage = image.map((row) => [...row]);
@@ -206,7 +207,7 @@ const drawLine = (
   let err = dx - dy;
 
   while (true) {
-    newImage[startY]![startX] = 255;
+    newImage[startY]![startX] = brightness;
     if (startX === endX && startY === endY) break;
     const e2 = 2 * err;
     if (e2 > -dy) {
@@ -360,7 +361,7 @@ const ImageCreator = () => {
   const [name, setName] = useState('');
   const [selectedSavedImage, setSelectedSavedImage] = useState<string>();
   const [greyScale, setGreyScale] = useState(false);
-  const [currentColour, setCurrentColour] = useState(0); // 0 = black, 255 = white
+  const [currentColour, setCurrentColour] = useState(255); // 0 = black, 255 = white
 
   const [localStorageKeys, setLocalStorageKeys] = useState<string[]>([]);
 
@@ -488,6 +489,7 @@ const ImageCreator = () => {
       lineStart.y,
       currentHoveredPixel.x,
       currentHoveredPixel.y,
+      greyScale ? currentColour : 255,
       Array.from({ length: height }, () =>
         Array.from({ length: width }, () => 0)
       )
@@ -1123,7 +1125,14 @@ const ImageCreator = () => {
                         setLineStarted(false);
                         setImage(
                           addHistory(
-                            drawLine(lineStart.x, lineStart.y, j, i, image)
+                            drawLine(
+                              lineStart.x,
+                              lineStart.y,
+                              j,
+                              i,
+                              greyScale ? currentColour : 255,
+                              image
+                            )
                           )
                         );
                       }
