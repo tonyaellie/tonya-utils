@@ -1,9 +1,9 @@
 'use client';
 
 // TODO:
-// - make nodes nicer (remove weird white line around initial node)
+// - make edge red if its going to be replaced
 
-import React, { useCallback, useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 import type {
   Connection,
@@ -92,13 +92,16 @@ const useStore = create<RFState>((set, get) => ({
     });
   },
   onConnect: (connection: Connection) => {
+    const currentEdges = get().edges.filter(
+      (edge) => edge.target !== connection.target
+    );
     set({
       edges: addEdge(
         {
           ...connection,
           animated: true,
         },
-        get().edges
+        currentEdges
       ),
     });
   },
@@ -182,11 +185,13 @@ const useStore = create<RFState>((set, get) => ({
 const InputNode = ({ data, id }: { data: InputNodeData; id: string }) => {
   const { updateInput } = useStore();
   return (
-    <div className="rounded-md border-2 border-primary-500 bg-amethyst-1 px-4 py-2">
-      <div>This node takes input</div>
-      <input
-        className="nodrag h-8 w-32 rounded-md border-2 border-primary-500 bg-amethyst-1 text-primary-500"
-        type="text"
+    <div className="rounded-md border-2 border-primary-500 bg-amethyst-1">
+      <div className="rounded-t border-b-2 border-primary-500 bg-green-900 px-2 py-1 font-bold">
+        Input
+      </div>
+      <textarea
+        id="text"
+        className="nodrag mx-4 mb-3 mt-4 h-32 w-96 rounded p-2 focus:outline-none"
         value={data.input}
         onChange={(e) => updateInput(id, e.target.value)}
       />
