@@ -29,7 +29,7 @@ const Home: NextPage = () => {
       <span className="px-2 py-1 font-bold">Utils:</span>
       <CustomLink name="counter" />
       <CustomLink name="diff" />
-      <CustomLink name="encoder" />
+      <CustomLink name="transformer" />
       <CustomLink name="TTTime" />
       <CustomLink name="UCAS" />
       <CustomLink name="countdown" />
@@ -39,6 +39,7 @@ const Home: NextPage = () => {
       <CustomLink name="char" />
       <CustomLink name="case" />
       <CustomLink name="image creator" />
+      <CustomLink name="time" />
     </div>
   );
 };
