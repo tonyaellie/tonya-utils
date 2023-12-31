@@ -18,15 +18,12 @@ const Countdown: NextPage = () => {
       const now = new Date();
       const diff = endDate.getTime() - now.getTime();
 
-      if (diff <= 0) {
-        setCountdown('');
-        return;
-      }
+      const absDiff = Math.abs(diff);
 
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((diff / 1000 / 60) % 60);
-      const seconds = Math.floor((diff / 1000) % 60);
+      const days = Math.floor(absDiff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((absDiff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((absDiff / 1000 / 60) % 60);
+      const seconds = Math.floor((absDiff / 1000) % 60);
 
       // if days are 0, don't show them
       const daysString = days > 0 ? `${days} days, ` : '';
@@ -36,8 +33,10 @@ const Countdown: NextPage = () => {
       const minutesString =
         days > 0 || hours > 0 || minutes > 0 ? `${minutes} minutes, ` : '';
 
+      const sign = diff < 0 ? '-' : '';
+
       setCountdown(
-        `${daysString}${hoursString}${minutesString}${seconds} seconds`
+        `${sign}${daysString}${hoursString}${minutesString}${seconds} seconds`
       );
     };
     calculateCountdown();
