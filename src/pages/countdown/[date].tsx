@@ -11,6 +11,7 @@ const Countdown: NextPage = () => {
   const { date, hideui, fullscreen } = router.query;
 
   const [countdown, setCountdown] = useState('Loading...');
+  const [negative, setNegative] = useState(false);
 
   useEffect(() => {
     const endDate = new Date(date as string);
@@ -34,6 +35,10 @@ const Countdown: NextPage = () => {
         days > 0 || hours > 0 || minutes > 0 ? `${minutes} minutes, ` : '';
 
       const sign = diff < 0 ? '-' : '';
+
+      if (diff < 0 && !negative) {
+        setNegative(true);
+      }
 
       setCountdown(
         `${sign}${daysString}${hoursString}${minutesString}${seconds} seconds`
@@ -68,7 +73,7 @@ const Countdown: NextPage = () => {
     >
       <div className="p-64 text-center text-5xl">
         {countdown}
-        {countdown === '' && <Fireworks className="absolute inset-0" />}
+        {negative && <Fireworks className="absolute inset-0" />}
       </div>
     </Layout>
   );
