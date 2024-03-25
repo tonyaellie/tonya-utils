@@ -6,3 +6,15 @@
   font-family: virgil;
   src: url(Virgil.woff2);
 }
+
+.react-flow__node-input {
+  border: none;
+}
+
+.react-flow__node-input.selected {
+  border: none;
+}
+
+.react-flow__node-input:focus {
+  border: none;
+}

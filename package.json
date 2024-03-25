@@ -19,8 +19,10 @@
     "react-diff-viewer-continued": "^3.2.6",
     "react-dom": "18.2.0",
     "react-toastify": "^9.1.2",
+    "reactflow": "^11.10.1",
     "superjson": "1.9.1",
-    "zod": "^3.21.4"
+    "zod": "^3.21.4",
+    "zustand": "^4.4.7"
   },
   "devDependencies": {
     "@types/node": "^18.15.11",
