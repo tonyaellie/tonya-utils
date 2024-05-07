@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Script from 'next/script';
 import NextTopLoader from 'nextjs-toploader';
 
 import Toastify from './Toastify';
@@ -16,6 +17,12 @@ const RootLayout = ({
   return (
     <html lang="en" style={{ colorScheme: 'dark' }}>
       <body className="bg-amethyst-1 text-primary-500">
+        <Script
+          defer
+          data-domain="utils.tokia.dev"
+          data-api="/ingest/api/event"
+          src="/ingest/js/script.js"
+        />
         <NextTopLoader color="#fa3aa6" />
         <Toastify />
         <div className="mx-auto min-h-screen justify-center antialiased">
