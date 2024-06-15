@@ -1,11 +1,12 @@
 'use client';
 
 // TODO:
-// - make edge red if its going to be replaced
-// - in certain cases, the node text is not updated correctly (put a transform node after an input node then a output and then move the input to point to the output)
-// - improve efficiency of calculateNodeText and the calls to it
-// - add more operations
-// remove weird outline around input and output nodes
+// - [ ] make edge red if its going to be replaced
+// - [ ] in certain cases, the node text is not updated correctly (put a transform node after an input node then a output and then move the input to point to the output)
+// - [ ] improve efficiency of calculateNodeText and the calls to it
+// - [ ] add more operations
+// - [x] remove weird outline around input and output nodes
+// - [ ] add import/export
 
 import React, { useEffect, useState } from 'react';
 
@@ -26,20 +27,21 @@ import type {
   OnNodesChange,
   XYPosition,
 } from 'reactflow';
-import { ControlButton } from 'reactflow';
-import { getIncomers } from 'reactflow';
-import { getOutgoers } from 'reactflow';
-import { ReactFlowProvider } from 'reactflow';
-import { useReactFlow } from 'reactflow';
-import { applyEdgeChanges, applyNodeChanges } from 'reactflow';
-import { Position } from 'reactflow';
-import { Handle } from 'reactflow';
 import ReactFlow, {
   MiniMap,
   Controls,
   Background,
   addEdge,
   BackgroundVariant,
+  ControlButton,
+  getIncomers,
+  getOutgoers,
+  ReactFlowProvider,
+  useReactFlow,
+  applyEdgeChanges,
+  applyNodeChanges,
+  Position,
+  Handle,
 } from 'reactflow';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
@@ -54,6 +56,8 @@ type InputNodeData = {
 const operations = [
   'base64_encode',
   'base64_decode',
+  'binary_encode_ascii',
+  'binary_decode_ascii',
   'binary_encode',
   'binary_decode',
 ] as const;
@@ -248,7 +252,7 @@ const store = create(
                     parent.data.text &&
                     Buffer.from(parent.data.text, 'base64').toString();
                   break;
-                case 'binary_encode':
+                case 'binary_encode_ascii':
                   text =
                     parent.data.text &&
                     parent.data.text
@@ -259,7 +263,7 @@ const store = create(
                       })
                       .join(' ');
                   break;
-                case 'binary_decode':
+                case 'binary_decode_ascii':
                   text =
                     parent.data.text &&
                     parent.data.text
@@ -269,6 +273,35 @@ const store = create(
                         return String.fromCharCode(charCode);
                       })
                       .join('');
+                  break;
+                // TODO: support newlines better
+                case 'binary_encode':
+                  text =
+                    parent.data.text &&
+                    parent.data.text
+                      .split('')
+                      .map((char) => char.replace(/\n/g, ' '))
+                      .filter((char) => char.match(/[0-9 ]/))
+                      .join('')
+                      .split(' ')
+                      .map((number) => {
+                        return (Number(number) >> 0).toString(2);
+                      })
+                      .join(' ');
+                  break;
+                case 'binary_decode':
+                  text =
+                    parent.data.text &&
+                    parent.data.text
+                      .split('')
+                      .map((char) => char.replace(/\n/g, ' '))
+                      .filter((char) => char.match(/[0-1 ]/))
+                      .join('')
+                      .split(' ')
+                      .map((binary) => {
+                        return parseInt(binary, 2);
+                      })
+                      .join(' ');
                   break;
                 default:
                   throw new Error('Invalid operation');
@@ -301,12 +334,8 @@ const store = create(
         const node = get().nodes.find((node) => node.id === id);
         if (!node) return;
 
-        if (node.data.type === 'input') {
-          const otherInputNodes = get().nodes.filter(
-            (node) => node.data.type === 'input'
-          );
-          if (otherInputNodes.length === 1) return;
-        }
+        const otherInputNodes = get().nodes;
+        if (otherInputNodes.length === 1) return;
 
         set({
           nodes: get().nodes.filter((node) => node.id !== id),
@@ -465,7 +494,7 @@ const TransformNode = ({ data, id }: NodeProps<TransformNodeData>) => {
           >
             {operations.map((operation) => (
               <option key={operation} value={operation} className="capitalize">
-                {operation.replace('_', ' ')}
+                {operation.replaceAll('_', ' ')}
               </option>
             ))}
           </select>
