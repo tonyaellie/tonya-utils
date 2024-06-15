@@ -14,9 +14,6 @@ const config = {
     defaultLocale: 'en',
   },
   optimizeFonts: true,
-  experimental: {
-    appDir: true,
-  },
   rewrites: async () => {
     return [
       {

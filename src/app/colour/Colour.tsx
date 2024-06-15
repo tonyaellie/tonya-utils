@@ -17,7 +17,7 @@ const HexDisplay = ({ num }: { num: number }) => {
         return;
       }
 
-      const params = new URLSearchParams(searchParams);
+      const params = new URLSearchParams(Array.from(searchParams));
       params.set(name, value);
 
       return params.toString();

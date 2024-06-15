@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 
 import Ucas from './Ucas';
 
@@ -9,9 +10,9 @@ export const metadata: Metadata = {
 
 const UcasPage = () => {
   return (
-    <>
+    <Suspense>
       <Ucas />
-    </>
+    </Suspense>
   );
 };
 

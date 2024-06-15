@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 
 import Colour from './Colour';
 
@@ -8,7 +9,11 @@ export const metadata: Metadata = {
 };
 
 const ColourPage = () => {
-  return <Colour />;
+  return (
+    <Suspense>
+      <Colour />
+    </Suspense>
+  );
 };
 
 export default ColourPage;
