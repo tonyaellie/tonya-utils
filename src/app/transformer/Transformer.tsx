@@ -590,7 +590,20 @@ const TransformerInternal = () => {
             </svg>
           </ControlButton>
         </Controls>
-        <MiniMap maskColor="#888" nodeColor="#fa3aa6" />
+        <MiniMap
+          style={{ background: '#435' }}
+          maskColor="#66666666"
+          nodeColor={(node) => {
+            switch (node.type) {
+              case 'input':
+                return '#f792cd';
+              case 'output':
+                return '#cd0482';
+              default:
+                return '#fa3aa6';
+            }
+          }}
+        />
         <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
       </ReactFlow>
     </div>
