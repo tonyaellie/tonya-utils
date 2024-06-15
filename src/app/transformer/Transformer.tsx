@@ -10,10 +10,11 @@
 
 import React, { useEffect, useState } from 'react';
 
-import type {
+import {
   Connection,
   Edge,
   EdgeChange,
+  getOutgoers,
   IsValidConnection,
   Node,
   NodeChange,
@@ -34,8 +35,6 @@ import ReactFlow, {
   addEdge,
   BackgroundVariant,
   ControlButton,
-  getIncomers,
-  getOutgoers,
   ReactFlowProvider,
   useReactFlow,
   applyEdgeChanges,
@@ -100,7 +99,7 @@ type RFState = {
   isValidConnection: IsValidConnection;
   screenToFlowPosition?: (position: XYPosition) => XYPosition;
   setScreenToFlowPositionFn: (fn: (position: XYPosition) => XYPosition) => void;
-  calculateNodeText: (fromNodeId?: string, includeRoot?: true) => void;
+  calculateNodeText: () => void;
   removeNode: (id: string) => void;
   updateInput: (id: string, input: string) => void;
   updateOperation: (id: string, operation: string) => void;
@@ -136,9 +135,7 @@ const store = create(
           ),
         });
 
-        get().calculateNodeText(
-          get().nodes.find((node) => node.id === connection.source)?.id
-        );
+        get().calculateNodeText();
       },
       onConnectStart: (event, params) => {
         set({
@@ -205,32 +202,21 @@ const store = create(
           screenToFlowPosition: fn,
         });
       },
-      calculateNodeText: (fromNodeId, includeRoot) => {
-        const from = fromNodeId
-          ? get().nodes.filter((node) => node.id === fromNodeId)
-          : get().nodes.filter((node) => node.data.type !== 'input');
+      calculateNodeText: () => {
+        const from = get().nodes.filter((node) => !node.parentId);
         const queue: {
           parent: Node<NodeData, string | undefined>;
           node: Node<NodeData, string | undefined>;
         }[] = [];
 
-        if (includeRoot) {
-          from.forEach((node) => {
+        from.forEach((node) => {
+          getOutgoers(node, get().nodes, get().edges).forEach((outgoer) => {
             queue.push({
-              parent: getIncomers(node, get().nodes, get().edges)[0] ?? node,
-              node,
+              parent: node,
+              node: outgoer,
             });
           });
-        } else {
-          from.forEach((node) => {
-            getOutgoers(node, get().nodes, get().edges).forEach((outgoer) => {
-              queue.push({
-                parent: node,
-                node: outgoer,
-              });
-            });
-          });
-        }
+        });
 
         while (queue.length > 0) {
           const data = queue.shift();
@@ -355,7 +341,7 @@ const store = create(
           }),
         });
 
-        get().calculateNodeText(id);
+        get().calculateNodeText();
       },
       updateOperation: (id, operation) => {
         set({
@@ -368,7 +354,7 @@ const store = create(
           }),
         });
 
-        get().calculateNodeText(id, true);
+        get().calculateNodeText();
       },
       updateType: (id, type) => {
         set({
@@ -402,7 +388,7 @@ const store = create(
           }),
         });
 
-        get().calculateNodeText(id, true);
+        get().calculateNodeText();
       },
     }),
     {
