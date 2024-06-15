@@ -25,15 +25,15 @@ const Time = () => {
         <div>
           {Math.floor(
             Math.abs(
-              new Date(`1970-01-01T${time1}:00`) -
-                new Date(`1970-01-01T${time2}:00`)
+              +new Date(`1970-01-01T${time1}:00`) -
+                +new Date(`1970-01-01T${time2}:00`)
             ) / 36e5
           )}{' '}
           hours and{' '}
           {Math.floor(
             Math.abs(
-              new Date(`1970-01-01T${time1}:00`) -
-                new Date(`1970-01-01T${time2}:00`)
+              +new Date(`1970-01-01T${time1}:00`) -
+                +new Date(`1970-01-01T${time2}:00`)
             ) / 6e4
           ) % 60}{' '}
           minutes
