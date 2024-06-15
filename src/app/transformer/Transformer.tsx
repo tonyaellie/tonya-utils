@@ -601,9 +601,9 @@ const Transformer = () => {
   const [rehydrated, setRehydrated] = useState(false);
 
   useEffect(() => {
-    console.log('rehydrating');
+    console.log('attempting to rehydrate');
     store.persist.rehydrate();
-    // console.log(useStore.getState());
+    console.log(store.getState());
     setRehydrated(true);
   }, []);
 
