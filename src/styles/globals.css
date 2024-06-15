@@ -11,5 +11,5 @@
 .react-flow__node-output,
 .react-flow__node-input.selected,
 .react-flow__node-input:focus {
-  border: none;
+  border: none !important;
 }
