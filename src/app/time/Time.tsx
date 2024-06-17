@@ -46,7 +46,7 @@ const Time = () => {
           Has a difference of{' '}
           {time2IsEarlier ? 23 - hours + (60 - minutes === 60 ? 1 : 0) : hours}{' '}
           hours and{' '}
-          {time2IsEarlier ? (60 - minutes === 60 ? 0 : 60 - minutes) : minutes}.
+          {time2IsEarlier ? (60 - minutes === 60 ? 0 : 60 - minutes) : minutes} minutes.
         </div>
       )}
     </div>
