@@ -102,6 +102,11 @@ const links: {
     href: '/ratio',
     description: 'Ratio calculator.',
   },
+  {
+    name: 'Teams Generator',
+    href: '/teams',
+    description: 'Generate teams from a given list of names.',
+  },
 ].sort((a, b) => a.name.localeCompare(b.name));
 
 const RootLayout = ({
@@ -133,6 +138,7 @@ const RootLayout = ({
                 <SheetTrigger asChild>
                   <Button variant="outline" size="icon">
                     <Menu />
+                    <span className="sr-only">Open Menu</span>
                   </Button>
                 </SheetTrigger>
                 <SheetContent side="left">

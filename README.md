@@ -15,7 +15,6 @@ To see a list of all the utilities, go to [https://utils.tokia.dev/](https://uti
 - Reader: A tool for reading a given piece of text aloud.
 - Request Sender: A tool for sending HTTP requests.
 - Formatter: A tool for formatting JSON/XML/HTML/CSS/JavaScript.
-- Team Generator: A tool for generating teams from a given list of names.
 - Timer: A tool for creating timers.
 - Stopwatch: A tool for creating stopwatches.
 - Quadratic Solver: A tool for solving quadratic equations (possibly with complex numbers and higher degree polynomials).
