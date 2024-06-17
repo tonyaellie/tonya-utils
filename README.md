@@ -1,20 +1,10 @@
 # Tonya's Utils
 
-A collection of utility functions and tools. Hosted at https://utils.tokia.dev/.
+A collection of utility functions and tools. Hosted at [https://utils.tokia.dev/](https://utils.tokia.dev/).
 
 ## Utils
 
-- [Counter](https://utils.tokia.dev/counter): A tool for counting the number of characters, words, or lines in a given piece of text.
-- [Diff](https://utils.tokia.dev/diff): A tool for comparing the differences between two pieces of text.
-- [Encoder](https://utils.tokia.dev/encoder): A tool for encoding a given piece of text.
-- [TTTime](https://utils.tokia.dev/tttime): A clock that displays the current TTTime.
-- [UCAS](https://utils.tokia.dev/ucas): A tool for calculating UCAS points from A-level grades.
-- [Countdown](https://utils.tokia.dev/countdown): A tool for creating countdowns.
-- [Passwords](https://utils.tokia.dev/passwords): A tool for generating secure passwords.
-- [Unix](https://utils.tokia.dev/unix): A tool for converting from unix time to a human-readable date and time.
-- [Colour](https://utils.tokia.dev/colour): A tool for picking colours/viewer.
-- [Char](https://utils.tokia.dev/char): A tool for getting the char at a given index in a string.
-- [Case](https://utils.tokia.dev/case): A tool for converting between different cases.
+To see a list of all the utilities, go to [https://utils.tokia.dev/](https://utils.tokia.dev/).
 
 ## Planned Utils
 
@@ -31,6 +21,7 @@ A collection of utility functions and tools. Hosted at https://utils.tokia.dev/.
 - Quadratic Solver: A tool for solving quadratic equations (possibly with complex numbers and higher degree polynomials).
 - Distribution Calculator: A tool for calculating the distribution of a given set of numbers (binomial, geometric, negative binomial, poison, etc).
 - Jellyfin Music Player: A music player for Jellyfin.
+- Syllable Counter: A tool for counting the number of syllables in a given piece of text.
 
 ## Utils that probably need a server/database
 
