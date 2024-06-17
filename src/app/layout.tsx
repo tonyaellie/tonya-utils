@@ -107,6 +107,11 @@ const links: {
     href: '/teams',
     description: 'Generate teams from a given list of names.',
   },
+  {
+    name: 'Syllable Counter',
+    href: '/syllable',
+    description: 'Count the number of syllables in a given piece of text.',
+  },
 ].sort((a, b) => a.name.localeCompare(b.name));
 
 const RootLayout = ({

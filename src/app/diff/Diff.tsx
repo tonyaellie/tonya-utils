@@ -12,7 +12,7 @@ const Diff = () => {
 
   return (
     <>
-      <div className="border-primary-500 mb-4 rounded-lg border-2">
+      <div className="mb-4 rounded-lg border-2">
         <Textarea
           className="-2 h-48 w-full rounded-b-none rounded-t-lg border-x-0 border-b-2 border-t-0 p-4"
           value={oldText}

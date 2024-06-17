@@ -18,7 +18,7 @@ const Counter = () => {
   }, [text]);
 
   return (
-    <div className="border-primary-500 w-full rounded-lg border-2">
+    <div className="w-full rounded-lg border-2">
       <Textarea
         value={text}
         onChange={(e) => setText(e.target.value)}

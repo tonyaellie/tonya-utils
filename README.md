@@ -20,7 +20,6 @@ To see a list of all the utilities, go to [https://utils.tokia.dev/](https://uti
 - Quadratic Solver: A tool for solving quadratic equations (possibly with complex numbers and higher degree polynomials).
 - Distribution Calculator: A tool for calculating the distribution of a given set of numbers (binomial, geometric, negative binomial, poison, etc).
 - Jellyfin Music Player: A music player for Jellyfin.
-- Syllable Counter: A tool for counting the number of syllables in a given piece of text.
 
 ## Utils that probably need a server/database
 
