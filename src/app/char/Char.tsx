@@ -2,19 +2,17 @@
 
 import { useState } from 'react';
 
+import { Input } from '@/components/ui/input';
+
 const Char = () => {
   const [string, setString] = useState('');
   const [index, setIndex] = useState<number>();
 
   return (
-    <div className='flex flex-col gap-2'>
+    <div className="flex flex-col gap-2">
       This does not use 0-indexing.
-      <input
-        value={string}
-        onChange={(e) => setString(e.target.value)}
-        className="w-48 rounded border border-primary-500 bg-amethyst-2 px-2 py-1 focus:outline-none"
-      />
-      <input
+      <Input value={string} onChange={(e) => setString(e.target.value)} />
+      <Input
         value={index || ''}
         onChange={(e) => {
           console.log(e.target.value);
@@ -36,7 +34,6 @@ const Char = () => {
           }
           setIndex(Number(e.target.value));
         }}
-        className="w-48 rounded border border-primary-500 bg-amethyst-2 px-2 py-1 focus:outline-none"
       />
       <span className="font-bold">
         {index !== undefined ? string[index - 1] : 'Please enter a valid index'}

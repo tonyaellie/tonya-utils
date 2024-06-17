@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 
 const getRandom = (arr: string) => {
   return arr[Math.floor(Math.random() * arr.length)];
@@ -62,9 +62,9 @@ const Passwords = () => {
   }, []);
 
   return (
-    <div className="flex w-56 flex-col rounded border border-primary-500">
+    <div className="flex w-56 flex-col overflow-clip rounded border">
       <button
-        className="border-primary-500 py-2 hover:bg-red-600 hover:text-amethyst-1"
+        className="py-2 hover:bg-destructive"
         onClick={() => {
           generatePasswords();
         }}
@@ -73,11 +73,16 @@ const Passwords = () => {
       </button>
       {passwords.map((password, index) => (
         <button
-          className="border-t border-primary-500 py-2 hover:bg-primary-500 hover:text-amethyst-1"
+          className="border-t py-2 hover:bg-primary"
           key={index}
           onClick={async () => {
-            await navigator.clipboard.writeText(password);
-            toast.success('Copied to clipboard!');
+            try {
+              await navigator.clipboard.writeText(password);
+              toast.success('Copied to clipboard!');
+            } catch (error) {
+              console.error(error);
+              toast.error('Failed to copy to clipboard!');
+            }
           }}
         >
           {password}

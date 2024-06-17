@@ -4,27 +4,29 @@ import { useState } from 'react';
 
 import ReactDiffViewer from 'react-diff-viewer-continued';
 
+import { Textarea } from '@/components/ui/textarea';
+
 const Diff = () => {
   const [oldText, setOldText] = useState('');
   const [newText, setNewText] = useState('');
 
   return (
     <>
-      <div className="mb-4 rounded-lg border-2 border-primary-500">
-        <textarea
-          className="h-48 w-full rounded-t-lg border-b-2 border-primary-500 bg-amethyst-2 p-4 focus:outline-none"
+      <div className="border-primary-500 mb-4 rounded-lg border-2">
+        <Textarea
+          className="-2 h-48 w-full rounded-b-none rounded-t-lg border-x-0 border-b-2 border-t-0 p-4"
           value={oldText}
           onChange={(e) => setOldText(e.target.value)}
         />
-        <div className="pb-2 pl-2">
+        <div className="py-2 pl-2">
           Characters {oldText.replace(/\n/g, '').length}
         </div>
-        <textarea
-          className="h-48 w-full border-y-2 border-primary-500 bg-amethyst-2 p-4 focus:outline-none"
+        <Textarea
+          className="h-48 w-full rounded-none border-x-0 border-y-2 p-4"
           value={newText}
           onChange={(e) => setNewText(e.target.value)}
         />
-        <div className="pb-2 pl-2">
+        <div className="py-2 pl-2">
           Characters {newText.replace(/\n/g, '').length}
         </div>
       </div>

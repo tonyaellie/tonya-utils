@@ -2,7 +2,34 @@
 
 import { useEffect, useState } from 'react';
 
+import {
+  ClipboardPaste,
+  Copy,
+  Dices,
+  Eraser,
+  FlipHorizontal,
+  FlipVertical,
+  PaintBucket,
+  Pencil,
+  Redo2,
+  RotateCcw,
+  RotateCw,
+  Undo2,
+} from 'lucide-react';
+import { toast } from 'sonner';
 import { z } from 'zod';
+
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 // TODO:
 //  - hotkeys
@@ -44,13 +71,13 @@ const NumberInput = ({
     setInternalValue(cleanedValue);
   };
   return (
-    <input
+    <Input
       hidden={hidden}
       id={id}
-      type="text"
+      type="number"
       value={internalValue}
       onChange={onChange}
-      className="rounded-md border-2 border-primary-500 px-1"
+      className={hidden ? 'hidden' : ''}
     />
   );
 };
@@ -59,9 +86,15 @@ const CopyText = ({ text, hidden }: { text: string; hidden?: boolean }) => {
   return (
     <div
       hidden={hidden}
-      className="m-2 cursor-pointer break-words"
-      onClick={() => {
-        navigator.clipboard.writeText(text);
+      className="m-2 cursor-pointer break-words hover:underline"
+      onClick={async () => {
+        try {
+          await navigator.clipboard.writeText(text);
+          toast.success('Copied to clipboard!');
+        } catch (error) {
+          console.error(error);
+          toast.error('Failed to copy to clipboard!');
+        }
       }}
     >
       {text}
@@ -568,473 +601,505 @@ const ImageCreator = () => {
   };
 
   return (
-    <div className="w-full rounded-lg border-2 border-primary-500">
-      <div className="m-2 grid grid-cols-2 gap-2">
-        <label htmlFor="width">Width:</label>
-        <NumberInput
-          id="width"
-          value={width}
-          setValue={setWidthChange}
-          min={1}
-          max={100}
-        />
-        <label htmlFor="height">Height:</label>
-        <NumberInput
-          id="height"
-          value={height}
-          setValue={setHeightChanges}
-          min={1}
-          max={100}
-        />
-        <label htmlFor="offSetX">OffSetX:</label>
-        <NumberInput
-          id="offSetX"
-          value={offSetX}
-          setValue={setOffSetX}
-          min={-width}
-          max={width}
-        />
-        <label htmlFor="offSetY">OffSetY:</label>
-        <NumberInput
-          id="offSetY"
-          value={offSetY}
-          setValue={setOffSetY}
-          min={-height}
-          max={height}
-        />
+    <div className="w-full">
+      <div className="m-2 flex flex-col gap-2">
+        <div className="flex gap-2">
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="width">Width:</Label>
+            <NumberInput
+              id="width"
+              value={width}
+              setValue={setWidthChange}
+              min={1}
+              max={100}
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="height">Height:</Label>
+            <NumberInput
+              id="height"
+              value={height}
+              setValue={setHeightChanges}
+              min={1}
+              max={100}
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="offSetX">OffSetX:</Label>
+            <NumberInput
+              id="offSetX"
+              value={offSetX}
+              setValue={setOffSetX}
+              min={-width}
+              max={width}
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="offSetY">OffSetY:</Label>
+            <NumberInput
+              id="offSetY"
+              value={offSetY}
+              setValue={setOffSetY}
+              min={-height}
+              max={height}
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label hidden={!greyScale} htmlFor="colour">
+              Colour:
+            </Label>
+            <NumberInput
+              hidden={!greyScale}
+              id="colour"
+              value={currentColour}
+              setValue={setCurrentColour}
+              min={0}
+              max={255}
+            />
+          </div>
+        </div>
 
-        <label htmlFor="greyScale">Greyscale:</label>
-        <input
-          id="greyScale"
-          type="checkbox"
-          checked={greyScale}
-          onChange={(e) => {
-            if (e.target.checked) {
-              setGreyScale(true);
-            } else {
-              // check that there are no pixels with a value other than 0 or 255
-              if (
-                image
-                  .map((row) => row.filter((col) => col !== 0 && col !== 255))
-                  .filter((row) => row.length > 0).length > 0
-              ) {
+        <div className="flex gap-2">
+          <Label htmlFor="greyScale">Greyscale:</Label>
+          <Checkbox
+            id="greyScale"
+            checked={greyScale}
+            onCheckedChange={(checked) => {
+              if (checked) {
+                setGreyScale(true);
+              } else {
+                // check that there are no pixels with a value other than 0 or 255
                 if (
-                  confirm(
-                    'This will convert all pixels that are not 0 or 255 to 255. Are you sure you want to continue?'
-                  )
+                  image
+                    .map((row) => row.filter((col) => col !== 0 && col !== 255))
+                    .filter((row) => row.length > 0).length > 0
                 ) {
-                  setImage(
-                    image.map((row) =>
-                      row.map((col) => (col === 0 || col === 255 ? col : 255))
+                  if (
+                    confirm(
+                      'This will convert all pixels that are not 0 or 255 to 255. Are you sure you want to continue?'
                     )
-                  );
-                  setGreyScale(false);
-                } else {
-                  return;
+                  ) {
+                    setImage(
+                      image.map((row) =>
+                        row.map((col) => (col === 0 || col === 255 ? col : 255))
+                      )
+                    );
+                    setGreyScale(false);
+                  } else {
+                    return;
+                  }
                 }
+                setGreyScale(false);
               }
-              setGreyScale(false);
-            }
-          }}
-          className="rounded-md border-2 px-1 accent-primary-500"
-        />
+            }}
+          />
+        </div>
 
-        <label hidden={!greyScale} htmlFor="colour">
-          Colour:
-        </label>
-        <NumberInput
-          hidden={!greyScale}
-          id="colour"
-          value={currentColour}
-          setValue={setCurrentColour}
-          min={0}
-          max={255}
-        />
+        <div className="grid grid-cols-2 gap-2">
+          <Select
+            onValueChange={(value) => {
+              setName(value);
+            }}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select an Image" />
+            </SelectTrigger>
+            <SelectContent>
+              {localStorageKeys
+                .filter((key) => key.includes('savedImage-'))
+                .map((key) => key.replace('savedImage-', ''))
+                .map((key) => (
+                  <SelectItem key={key} value={key}>
+                    {key}
+                  </SelectItem>
+                ))}
+            </SelectContent>
+          </Select>
 
-        <select
-          value={selectedSavedImage}
-          onChange={(e) => {
-            setSelectedSavedImage(e.target.value);
-          }}
-          className="rounded-md border-2 border-primary-500 px-1"
-        >
-          <option hidden value="">
-            Select Image
-          </option>
-          {localStorageKeys
-            .filter((key) => key.includes('savedImage-'))
-            .map((key) => key.replace('savedImage-', ''))
-            .map((key) => (
-              <option key={key} value={key}>
-                {key}
-              </option>
-            ))}
-        </select>
+          <Button
+            variant="outline"
+            onClick={() => {
+              loadImage();
+            }}
+          >
+            Load Image
+          </Button>
 
-        <button
-          onClick={() => {
-            loadImage();
-          }}
-          className="rounded-md border-2 border-primary-500 px-2"
-        >
-          Load Image
-        </button>
+          <Input
+            placeholder="File Name"
+            type="text"
+            value={name}
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
+          />
 
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => {
-            setName(e.target.value);
-          }}
-          className="rounded-md border-2 border-primary-500 px-1"
-        />
+          <Button
+            variant="outline"
+            onClick={() => {
+              saveImage();
+            }}
+          >
+            Save Image
+          </Button>
 
-        <button
-          onClick={() => {
-            saveImage();
-          }}
-          className="rounded-md border-2 border-primary-500 px-2"
-        >
-          Save Image
-        </button>
-
-        <button
-          onClick={() => {
-            resetStarted();
-            setSelectionStarted(true);
-          }}
-          className={`rounded-md border-2 border-primary-500 px-2 ${
-            selectionStarted ? 'bg-primary-950' : 'bg-amethyst-1'
-          }`}
-        >
-          Start Selection
-        </button>
-
-        <button
-          onClick={() => {
-            setSelection(undefined);
-            setSelectionStarted(false);
-          }}
-          className={`rounded-md border-2 border-primary-500 px-2`}
-        >
-          Clear Selection
-        </button>
-
-        <button
-          onClick={() => {
-            if (history.length - historyIndex > 1) {
-              setImage(history[history.length - historyIndex - 2]!);
-              setHistoryIndex(historyIndex + 1);
-            }
-          }}
-          className="rounded-md border-2 border-primary-500 px-2"
-        >
-          Undo
-        </button>
-
-        <button
-          onClick={() => {
-            if (historyIndex > 0) {
-              setImage(history[history.length - historyIndex]!);
-              setHistoryIndex(historyIndex - 1);
-            }
-          }}
-          className="rounded-md border-2 border-primary-500 px-2"
-        >
-          Redo
-        </button>
-
-        <button
-          onClick={() => {
-            if (selection && selection.width && selection.height) {
-              const area = getArea(
-                selection.x,
-                selection.y,
-                selection.width,
-                selection.height,
-                image
-              );
-              setCopied({
-                x: selection.x,
-                y: selection.y,
-                width: selection.width,
-                height: selection.height,
-                image: area,
-              });
-            } else {
-              setCopied({
-                x: 0,
-                y: 0,
-                width,
-                height,
-                image,
-              });
-            }
-          }}
-          className="rounded-md border-2 border-primary-500 px-2"
-        >
-          Copy
-        </button>
-
-        <button
-          onClick={() => {
-            if (copied) {
+          <Button
+            variant="outline"
+            onClick={() => {
               resetStarted();
-              setPasteStarted(true);
-            }
-          }}
-          className={`rounded-md border-2 border-primary-500 px-2 ${
-            pasteStarted ? 'bg-primary-950' : 'bg-amethyst-1'
-          }`}
-        >
-          Paste
-        </button>
+              setSelectionStarted(true);
+            }}
+            className={`${selectionStarted ? 'bg-primary' : ''}`}
+          >
+            Start Selection
+          </Button>
 
-        <button
-          onClick={() => {
-            if (selection && selection.width && selection.height) {
-              setImage(
-                addHistory(
-                  clearArea(
-                    selection.x,
-                    selection.y,
-                    selection.width,
-                    selection.height,
-                    image
+          <Button
+            variant="outline"
+            onClick={() => {
+              setSelection(undefined);
+              setSelectionStarted(false);
+            }}
+          >
+            Clear Selection
+          </Button>
+        </div>
+
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => {
+              if (history.length - historyIndex > 1) {
+                setImage(history[history.length - historyIndex - 2]!);
+                setHistoryIndex(historyIndex + 1);
+              }
+            }}
+          >
+            <Undo2 />
+          </Button>
+
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => {
+              if (historyIndex > 0) {
+                setImage(history[history.length - historyIndex]!);
+                setHistoryIndex(historyIndex - 1);
+              }
+            }}
+          >
+            <Redo2 />
+          </Button>
+
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => {
+              if (selection && selection.width && selection.height) {
+                const area = getArea(
+                  selection.x,
+                  selection.y,
+                  selection.width,
+                  selection.height,
+                  image
+                );
+                setCopied({
+                  x: selection.x,
+                  y: selection.y,
+                  width: selection.width,
+                  height: selection.height,
+                  image: area,
+                });
+              } else {
+                setCopied({
+                  x: 0,
+                  y: 0,
+                  width,
+                  height,
+                  image,
+                });
+              }
+            }}
+          >
+            <Copy />
+          </Button>
+
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => {
+              if (copied) {
+                resetStarted();
+                setPasteStarted(true);
+              }
+            }}
+            className={`${pasteStarted ? 'bg-primary-950' : 'bg-amethyst-1'}`}
+          >
+            <ClipboardPaste />
+          </Button>
+
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => {
+              if (selection && selection.width && selection.height) {
+                setImage(
+                  addHistory(
+                    clearArea(
+                      selection.x,
+                      selection.y,
+                      selection.width,
+                      selection.height,
+                      image
+                    )
                   )
-                )
-              );
-            } else {
-              setImage(addHistory(clearArea(0, 0, width, height, image)));
-            }
-          }}
-          className="rounded-md border-2 border-primary-500 px-2"
-        >
-          Clear
-        </button>
+                );
+              } else {
+                setImage(addHistory(clearArea(0, 0, width, height, image)));
+              }
+            }}
+          >
+            <Eraser />
+          </Button>
 
-        <button
-          onClick={() => {
-            if (selection && selection.width && selection.height) {
-              setImage(
-                addHistory(
-                  invertArea(
-                    selection.x,
-                    selection.y,
-                    selection.width,
-                    selection.height,
-                    image
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => {
+              if (selection && selection.width && selection.height) {
+                setImage(
+                  addHistory(
+                    invertArea(
+                      selection.x,
+                      selection.y,
+                      selection.width,
+                      selection.height,
+                      image
+                    )
                   )
-                )
-              );
-            } else {
-              setImage(addHistory(invertArea(0, 0, width, height, image)));
-            }
-          }}
-          className="rounded-md border-2 border-primary-500 px-2"
-        >
-          Invert
-        </button>
+                );
+              } else {
+                setImage(addHistory(invertArea(0, 0, width, height, image)));
+              }
+            }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 -960 960 960"
+              width="24px"
+              fill="#e8eaed"
+            >
+              <path d="M480-120q-133 0-226.5-92.5T160-436q0-66 25-122t69-100l226-222 226 222q44 44 69 100t25 122q0 131-93.5 223.5T480-120Zm0-80v-568L310-600q-35 33-52.5 74.5T240-436q0 97 70 166.5T480-200Z" />
+            </svg>
+          </Button>
 
-        <button
-          onClick={() => {
-            if (selection && selection.width && selection.height) {
-              setImage(
-                addHistory(
-                  rotateArea(
-                    selection.x,
-                    selection.y,
-                    selection.width,
-                    selection.height,
-                    image,
-                    'left'
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => {
+              if (selection && selection.width && selection.height) {
+                setImage(
+                  addHistory(
+                    rotateArea(
+                      selection.x,
+                      selection.y,
+                      selection.width,
+                      selection.height,
+                      image,
+                      'left'
+                    )
                   )
-                )
-              );
-            } else {
-              setImage(
-                addHistory(rotateArea(0, 0, width, height, image, 'left'))
-              );
-            }
-          }}
-          className="rounded-md border-2 border-primary-500 px-2"
-        >
-          Rotate Left
-        </button>
+                );
+              } else {
+                setImage(
+                  addHistory(rotateArea(0, 0, width, height, image, 'left'))
+                );
+              }
+            }}
+          >
+            <RotateCcw />
+          </Button>
 
-        <button
-          onClick={() => {
-            if (selection && selection.width && selection.height) {
-              setImage(
-                addHistory(
-                  rotateArea(
-                    selection.x,
-                    selection.y,
-                    selection.width,
-                    selection.height,
-                    image,
-                    'right'
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => {
+              if (selection && selection.width && selection.height) {
+                setImage(
+                  addHistory(
+                    rotateArea(
+                      selection.x,
+                      selection.y,
+                      selection.width,
+                      selection.height,
+                      image,
+                      'right'
+                    )
                   )
-                )
-              );
-            } else {
-              setImage(
-                addHistory(rotateArea(0, 0, width, height, image, 'right'))
-              );
-            }
-          }}
-          className="rounded-md border-2 border-primary-500 px-2"
-        >
-          Rotate Right
-        </button>
+                );
+              } else {
+                setImage(
+                  addHistory(rotateArea(0, 0, width, height, image, 'right'))
+                );
+              }
+            }}
+          >
+            <RotateCw />
+          </Button>
 
-        <button
-          onClick={() => {
-            if (selection && selection.width && selection.height) {
-              setImage(
-                addHistory(
-                  flipArea(
-                    selection.x,
-                    selection.y,
-                    selection.width,
-                    selection.height,
-                    image,
-                    'horizontal'
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => {
+              if (selection && selection.width && selection.height) {
+                setImage(
+                  addHistory(
+                    flipArea(
+                      selection.x,
+                      selection.y,
+                      selection.width,
+                      selection.height,
+                      image,
+                      'horizontal'
+                    )
                   )
-                )
-              );
-            } else {
-              setImage(
-                addHistory(flipArea(0, 0, width, height, image, 'horizontal'))
-              );
-            }
-          }}
-          className="rounded-md border-2 border-primary-500 px-2"
-        >
-          Flip Horizontal
-        </button>
+                );
+              } else {
+                setImage(
+                  addHistory(flipArea(0, 0, width, height, image, 'horizontal'))
+                );
+              }
+            }}
+          >
+            <FlipHorizontal />
+          </Button>
 
-        <button
-          onClick={() => {
-            if (selection && selection.width && selection.height) {
-              setImage(
-                addHistory(
-                  flipArea(
-                    selection.x,
-                    selection.y,
-                    selection.width,
-                    selection.height,
-                    image,
-                    'vertical'
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => {
+              if (selection && selection.width && selection.height) {
+                setImage(
+                  addHistory(
+                    flipArea(
+                      selection.x,
+                      selection.y,
+                      selection.width,
+                      selection.height,
+                      image,
+                      'vertical'
+                    )
                   )
-                )
-              );
-            } else {
-              setImage(
-                addHistory(flipArea(0, 0, width, height, image, 'vertical'))
-              );
-            }
-          }}
-          className="rounded-md border-2 border-primary-500 px-2"
-        >
-          Flip Vertical
-        </button>
+                );
+              } else {
+                setImage(
+                  addHistory(flipArea(0, 0, width, height, image, 'vertical'))
+                );
+              }
+            }}
+          >
+            <FlipVertical />
+          </Button>
 
-        <button
-          onClick={() => {
-            if (selection && selection.width && selection.height) {
-              setImage(
-                addHistory(
-                  drawRectangle(
-                    selection.x,
-                    selection.y,
-                    selection.x + selection.width,
-                    selection.y + selection.height,
-                    image
+          <Button
+            variant="outline"
+            onClick={() => {
+              if (selection && selection.width && selection.height) {
+                setImage(
+                  addHistory(
+                    drawRectangle(
+                      selection.x,
+                      selection.y,
+                      selection.x + selection.width,
+                      selection.y + selection.height,
+                      image
+                    )
                   )
-                )
-              );
-            } else {
-              setImage(addHistory(drawRectangle(0, 0, width, height, image)));
-            }
-          }}
-          className="rounded-md border-2 border-primary-500 px-2"
-        >
-          Draw Rectangle
-        </button>
+                );
+              } else {
+                setImage(addHistory(drawRectangle(0, 0, width, height, image)));
+              }
+            }}
+          >
+            Rect
+          </Button>
 
-        <button
-          onClick={() => {
-            if (selection && selection.width && selection.height) {
-              setImage(
-                addHistory(
-                  drawCircle(
-                    selection.x,
-                    selection.y,
-                    selection.x + selection.width,
-                    selection.y + selection.height,
-                    image,
-                    greyScale
+          <Button
+            variant="outline"
+            onClick={() => {
+              if (selection && selection.width && selection.height) {
+                setImage(
+                  addHistory(
+                    drawCircle(
+                      selection.x,
+                      selection.y,
+                      selection.x + selection.width,
+                      selection.y + selection.height,
+                      image,
+                      greyScale
+                    )
                   )
-                )
-              );
-            } else {
-              setImage(
-                addHistory(drawCircle(0, 0, width, height, image, greyScale))
-              );
-            }
-          }}
-          className="rounded-md border-2 border-primary-500 px-2"
-        >
-          Draw Circle
-        </button>
+                );
+              } else {
+                setImage(
+                  addHistory(drawCircle(0, 0, width, height, image, greyScale))
+                );
+              }
+            }}
+          >
+            Circle
+          </Button>
 
-        <button
-          onClick={() => {
-            if (selection && selection.width && selection.height) {
-              setImage(
-                addHistory(
-                  randomiseArea(
-                    selection.x,
-                    selection.y,
-                    selection.width,
-                    selection.height,
-                    image
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => {
+              if (selection && selection.width && selection.height) {
+                setImage(
+                  addHistory(
+                    randomiseArea(
+                      selection.x,
+                      selection.y,
+                      selection.width,
+                      selection.height,
+                      image
+                    )
                   )
-                )
-              );
-            } else {
-              setImage(addHistory(randomiseArea(0, 0, width, height, image)));
-            }
-          }}
-          className="rounded-md border-2 border-primary-500 px-2"
-        >
-          Randomise
-        </button>
+                );
+              } else {
+                setImage(addHistory(randomiseArea(0, 0, width, height, image)));
+              }
+            }}
+          >
+            <Dices />
+          </Button>
 
-        <button
-          onClick={() => {
-            resetStarted();
-            setLineStarted(true);
-          }}
-          className={`rounded-md border-2 border-primary-500 px-2 ${
-            lineStarted ? 'bg-primary-950' : 'bg-amethyst-1'
-          }`}
-        >
-          Draw Line
-        </button>
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => {
+              resetStarted();
+              setLineStarted(true);
+            }}
+            className={`${lineStarted ? 'bg-primary' : ''}`}
+          >
+            <Pencil />
+          </Button>
 
-        <button
-          onClick={() => {
-            resetStarted();
-            setFillStarted(true);
-          }}
-          className={`rounded-md border-2 border-primary-500 px-2 ${
-            fillStarted ? 'bg-primary-950' : 'bg-amethyst-1'
-          }`}
-        >
-          Fill
-        </button>
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => {
+              resetStarted();
+              setFillStarted(true);
+            }}
+            className={`${fillStarted ? 'bg-primary' : ''}`}
+          >
+            <PaintBucket />
+          </Button>
+        </div>
       </div>
 
       <div className="m-2 flex flex-col">
@@ -1058,11 +1123,7 @@ const ImageCreator = () => {
                 }}
                 key={`${i}-${j}`}
                 className={`h-8 w-8 border-2 ${
-                  greyScale
-                    ? ''
-                    : image[i]![j]
-                    ? 'bg-primary-500'
-                    : 'bg-gray-800'
+                  !greyScale && image[i]![j] ? 'bg-primary' : 'bg-accent/60'
                 } ${
                   currentHoveredPixel?.x === j &&
                   currentHoveredPixel?.y === i &&

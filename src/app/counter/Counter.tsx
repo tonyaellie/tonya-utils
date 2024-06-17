@@ -2,6 +2,8 @@
 
 import { useMemo, useState } from 'react';
 
+import { Textarea } from '@/components/ui/textarea';
+
 const Counter = () => {
   const [text, setText] = useState('');
   const counts = useMemo(() => {
@@ -16,13 +18,13 @@ const Counter = () => {
   }, [text]);
 
   return (
-    <div className="w-full rounded-lg border-2 border-primary-500">
-      <textarea
+    <div className="border-primary-500 w-full rounded-lg border-2">
+      <Textarea
         value={text}
         onChange={(e) => setText(e.target.value)}
-        className="h-64 w-full rounded-t-lg border-b-2 border-primary-500 bg-amethyst-2 p-4 focus:outline-none"
+        className="h-64 w-full rounded-b-none border-x-0 border-b-2 border-t-0"
       />
-      <div className="flex flex-row justify-around pb-2">
+      <div className="flex flex-row justify-around py-2">
         <span className="w-32">Characters {counts.chars}</span>
         <span className="w-32">
           Words {counts.chars === 0 ? 0 : counts.words}

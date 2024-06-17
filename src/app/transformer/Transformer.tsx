@@ -40,7 +40,7 @@ const TransformerInternal = () => {
     // onSelectionChange,
   } = store();
   const { screenToFlowPosition } = useReactFlow();
-  
+
   // useOnSelectionChange({
   //   onChange: onSelectionChange,
   // });

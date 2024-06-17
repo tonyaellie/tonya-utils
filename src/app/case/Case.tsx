@@ -2,7 +2,12 @@
 
 import { useState } from 'react';
 
-// TODO: add support for other cases
+import { Copy } from 'lucide-react';
+import { toast } from 'sonner';
+
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Textarea } from '@/components/ui/textarea';
 
 const doNotCapitalize = [
   'a',
@@ -41,6 +46,7 @@ const doNotCapitalize = [
 const toTitleCase = (string: string) => {
   return string
     .split(' ')
+    .filter((word) => word)
     .map((word) =>
       doNotCapitalize.includes(word)
         ? word
@@ -55,17 +61,107 @@ const removeDashes = (string: string) => {
 
 const Case = () => {
   const [string, setString] = useState('');
+  const [shouldRemoveDashes, setRemoveDashes] = useState(true);
 
+  // show in title case, lowercase, uppercase
   return (
     <div className="flex flex-col gap-2">
-      <input
-        value={string}
-        onChange={(e) => setString(e.target.value)}
-        className="rounded border border-primary-500 bg-amethyst-2 px-2 py-1 focus:outline-none"
-      />
-      <span className="font-bold">
-        {string ? toTitleCase(removeDashes(string)) : 'Enter a string'}
-      </span>
+      <Textarea value={string} onChange={(e) => setString(e.target.value)} />
+      <div className="flex items-center gap-2 font-bold">
+        Remove dashes?
+        <Checkbox
+          className="size-5"
+          checked={shouldRemoveDashes}
+          onCheckedChange={(e) => setRemoveDashes(e === true)}
+        />
+      </div>
+      <div>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={async () => {
+              try {
+                await navigator.clipboard.writeText(
+                  shouldRemoveDashes
+                    ? toTitleCase(removeDashes(string))
+                    : toTitleCase(string)
+                );
+                toast.success('Copied to clipboard!');
+              } catch (error) {
+                console.error(error);
+                toast.error('Failed to copy to clipboard!');
+              }
+            }}
+          >
+            <Copy />
+          </Button>
+          Title case:
+        </div>
+        <div className="mt-2">
+          {shouldRemoveDashes
+            ? toTitleCase(removeDashes(string))
+            : toTitleCase(string)}
+        </div>
+      </div>
+      <div>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={async () => {
+              try {
+                await navigator.clipboard.writeText(
+                  shouldRemoveDashes
+                    ? removeDashes(string).toLowerCase()
+                    : string.toLowerCase()
+                );
+                toast.success('Copied to clipboard!');
+              } catch (error) {
+                console.error(error);
+                toast.error('Failed to copy to clipboard!');
+              }
+            }}
+          >
+            <Copy />
+          </Button>
+          Lowercase:
+        </div>
+        <div className="mt-2">
+          {shouldRemoveDashes
+            ? removeDashes(string).toLowerCase()
+            : string.toLowerCase()}
+        </div>
+      </div>
+      <div>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={async () => {
+              try {
+                await navigator.clipboard.writeText(
+                  shouldRemoveDashes
+                    ? removeDashes(string).toUpperCase()
+                    : string.toUpperCase()
+                );
+                toast.success('Copied to clipboard!');
+              } catch (error) {
+                console.error(error);
+                toast.error('Failed to copy to clipboard!');
+              }
+            }}
+          >
+            <Copy />
+          </Button>
+          Uppercase:
+        </div>
+        <div className="mt-2">
+          {shouldRemoveDashes
+            ? removeDashes(string).toUpperCase()
+            : string.toUpperCase()}
+        </div>
+      </div>
     </div>
   );
 };

@@ -5,9 +5,20 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 
 import { useAutoAnimate } from '@formkit/auto-animate/react';
+import { X } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 import { z } from 'zod';
+
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 type Qualification = {
   name: string;
@@ -97,41 +108,49 @@ const allQualification = [
   },
 ];
 
-const QualificationBox: React.FC<{
+const QualificationBox = ({
+  qualifications,
+  setQualifications,
+  position,
+}: {
   qualifications: Qualification[];
   setQualifications: Dispatch<SetStateAction<Qualification[]>>;
   position: number;
-}> = ({ qualifications, setQualifications, position }) => {
+}) => {
   return (
     <div className="flex">
-      <select
-        className="bg-amethyst-2 focus:outline-none"
+      <Select
         value={qualifications[position]!.id}
-        onChange={(e) => {
+        onValueChange={(newValue) => {
           const newQualifications = [...qualifications];
           newQualifications[position] = {
-            name: e.target.value,
+            name: newValue,
             value:
               allQualification.find(
-                (qualification) => qualification.id === e.target.value
+                (qualification) => qualification.id === newValue
               )?.value || 0,
-            id: e.target.value,
+            id: newValue,
           };
           setQualifications(newQualifications);
         }}
       >
-        <option value="choose">Choose a qualification</option>
-        <option value="custom">Custom</option>
-        {allQualification.map((qualification) => (
-          <option value={qualification.id} key={qualification.id}>
-            {qualification.name}
-          </option>
-        ))}
-      </select>
+        <SelectTrigger>
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="choose">Choose a qualification</SelectItem>
+          <SelectItem value="custom">Custom</SelectItem>
+          {allQualification.map((qualification) => (
+            <SelectItem key={qualification.id} value={qualification.id}>
+              {qualification.name}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
       <div className="p-2" />
       {qualifications[position]!.id === 'custom' ? (
-        <input
-          className="bg-amethyst-2 focus:outline-none"
+        <Input
+          className="w-24"
           type="number"
           value={qualifications[position]!.value}
           onChange={(e) => {
@@ -145,18 +164,22 @@ const QualificationBox: React.FC<{
           }}
         />
       ) : (
-        <span>{qualifications[position]!.value}</span>
+        <span className="m-auto">{qualifications[position]!.value}</span>
       )}
       <div className="p-2" />
-      <button
-        onClick={() => {
-          const newQualifications = [...qualifications];
-          newQualifications.splice(position, 1);
-          setQualifications(newQualifications);
-        }}
-      >
-        Remove
-      </button>
+      <div>
+        <Button
+          variant="destructive"
+          size="icon"
+          onClick={() => {
+            const newQualifications = [...qualifications];
+            newQualifications.splice(position, 1);
+            setQualifications(newQualifications);
+          }}
+        >
+          <X />
+        </Button>
+      </div>
     </div>
   );
 };
@@ -197,8 +220,8 @@ const Ucas = () => {
 
   return (
     <>
-      <div ref={animationParent}>
-        {qualifications.map((qualification, index) => (
+      <div ref={animationParent} className="flex flex-col gap-2">
+        {qualifications.map((_, index) => (
           <QualificationBox
             qualifications={qualifications}
             setQualifications={setQualifications}
@@ -207,32 +230,44 @@ const Ucas = () => {
           />
         ))}
       </div>
-      <button
-        onClick={() => {
-          setQualifications([
-            ...qualifications,
-            { name: 'Choose a qualification', value: 0, id: 'choose' },
-          ]);
-        }}
-      >
-        Add qualification
-      </button>
-      <div>Total: {qualifications.reduce((a, b) => a + b.value, 0)}</div>
-      <button
-        onClick={() => {
-          navigator.clipboard.writeText(
-            `${
-              process.env.NODE_ENV === 'production'
-                ? // FIXME: url should not be hardcoded
-                  'https://utils.tokia.dev'
-                : 'http://localhost:3000'
-            }/ucas?data=${encodeURIComponent(JSON.stringify(qualifications))}`
-          );
-          toast.success('Copied to clipboard!');
-        }}
-      >
-        Share
-      </button>
+      <div className="my-4 text-xl">
+        Total: {qualifications.reduce((a, b) => a + b.value, 0)}
+      </div>
+      <div className="flex gap-2">
+        <Button
+          onClick={() => {
+            setQualifications([
+              ...qualifications,
+              { name: 'Choose a qualification', value: 0, id: 'choose' },
+            ]);
+          }}
+        >
+          Add qualification
+        </Button>
+        <Button
+          variant="outline"
+          onClick={async () => {
+            try {
+              await navigator.clipboard.writeText(
+                `${
+                  process.env.NODE_ENV === 'production'
+                    ? // FIXME: url should not be hardcoded
+                      'https://utils.tokia.dev'
+                    : 'http://localhost:3000'
+                }/ucas?data=${encodeURIComponent(
+                  JSON.stringify(qualifications)
+                )}`
+              );
+              toast.success('Copied to clipboard!');
+            } catch (error) {
+              console.error(error);
+              toast.error('Failed to copy to clipboard!');
+            }
+          }}
+        >
+          Share
+        </Button>
+      </div>
     </>
   );
 };

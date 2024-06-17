@@ -1,5 +1,17 @@
+import { X } from 'lucide-react';
 import type { NodeOrigin, NodeProps, NodeTypes } from 'reactflow';
 import { Position, Handle } from 'reactflow';
+
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 
 import { operationNames } from './operations';
 import { store } from './store';
@@ -25,42 +37,44 @@ export type NodeData = InputNodeData | TransformNodeData | OutputNodeData;
 export const SelectNodeType = ({ type, id }: { type: string; id: string }) => {
   const { updateType } = store();
   return (
-    <select
-      id="type"
-      className="nodrag h-10 w-32 rounded bg-amethyst-2 p-2 focus:outline-none"
-      value={type}
-      onChange={(e) => updateType(id, e.target.value)}
-    >
-      <option value="input">Input</option>
-      <option value="transform">Transform</option>
-      <option value="output">Output</option>
-    </select>
+    <Select value={type} onValueChange={(newValue) => updateType(id, newValue)}>
+      <SelectTrigger className="nodrag w-32">
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="input">Input</SelectItem>
+        <SelectItem value="transform">Transform</SelectItem>
+        <SelectItem value="output">Output</SelectItem>
+      </SelectContent>
+    </Select>
   );
 };
 
 export const RemoveNodeButton = ({ id }: { id: string }) => {
   const { removeNode } = store();
   return (
-    <button
-      className="nodrag h-10 w-10 rounded bg-red-900 p-2 focus:outline-none"
+    <Button
+      variant="destructive"
+      size="icon"
+      className="nodrag"
       onClick={() => removeNode(id)}
     >
-      ×
-    </button>
+      <X />
+    </Button>
   );
 };
 
 export const InputNode = ({ data, id }: NodeProps<InputNodeData>) => {
   const { updateInput } = store();
   return (
-    <div className="rounded-md border-2 border-primary-500 bg-amethyst-1">
-      <div className="flex flex-row items-center justify-between rounded-t border-b-2 border-primary-500 bg-green-900 px-2 py-1 font-bold">
+    <div className="rounded-md border-2 bg-background">
+      <div className="flex flex-row items-center justify-between rounded-t border-b-2 bg-green-900 p-2 font-bold">
         <SelectNodeType type={data.type} id={id} />
         <RemoveNodeButton id={id} />
       </div>
-      <textarea
+      <Textarea
         id="text"
-        className="nodrag mx-4 mb-3 mt-4 h-32 w-96 rounded bg-amethyst-2 p-2 focus:outline-none"
+        className="nodrag m-4 h-32 w-96 p-2"
         value={data.text}
         onChange={(e) => updateInput(id, e.target.value)}
       />
@@ -77,33 +91,40 @@ export const TransformNode = ({ data, id }: NodeProps<TransformNodeData>) => {
   const { updateOperation } = store();
 
   return (
-    <div className="rounded-md border-2 border-primary-500 bg-amethyst-1">
+    <div className="rounded-md border-2 bg-background">
       <Handle
         type="target"
         position={Position.Left}
         className="h-8 w-4 rounded bg-gray-700"
       />
-      <div className="flex flex-row items-center justify-between rounded-t border-b-2 border-primary-500 bg-blue-900 px-2 py-1 font-bold">
+      <div className="flex flex-row items-center justify-between rounded-t border-b-2 bg-blue-900 p-2 font-bold">
         <SelectNodeType type={data.type} id={id} />
         <RemoveNodeButton id={id} />
       </div>
       <div className="m-4 flex flex-col items-center justify-center">
         <div className="flex flex-row items-center justify-center space-x-2">
-          <label htmlFor="operation" className="font-bold">
+          <Label htmlFor="operation" className="font-bold">
             Operation
-          </label>
-          <select
-            id="operation"
-            className="nodrag h-8 w-96 rounded bg-amethyst-2 p-2 focus:outline-none"
+          </Label>
+          <Select
             value={data.operation}
-            onChange={(e) => updateOperation(id, e.target.value)}
+            onValueChange={(newValue) => updateOperation(id, newValue)}
           >
-            {operationNames.map((operation) => (
-              <option key={operation} value={operation} className="capitalize">
-                {operation.replaceAll('_', ' ')}
-              </option>
-            ))}
-          </select>
+            <SelectTrigger className="w-96" id="operation">
+              <SelectValue className="nodrag" />
+            </SelectTrigger>
+            <SelectContent>
+              {operationNames.map((operation) => (
+                <SelectItem
+                  key={operation}
+                  value={operation}
+                  className="capitalize"
+                >
+                  {operation.replaceAll('_', ' ')}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
       <Handle
@@ -117,13 +138,13 @@ export const TransformNode = ({ data, id }: NodeProps<TransformNodeData>) => {
 
 export const OutputNode = ({ data, id }: NodeProps<OutputNodeData>) => {
   return (
-    <div className="rounded-md border-2 border-primary-500 bg-amethyst-1">
+    <div className="rounded-md border-2 bg-background">
       <Handle
         type="target"
         position={Position.Left}
         className="h-8 w-4 rounded bg-gray-700"
       />
-      <div className="flex flex-row items-center justify-between rounded-t border-b-2 border-primary-500 bg-red-900 px-2 py-1 font-bold">
+      <div className="flex flex-row items-center justify-between gap-2 rounded-t border-b-2 bg-primary p-2">
         <SelectNodeType type="output" id={id} />
         <RemoveNodeButton id={id} />
       </div>
