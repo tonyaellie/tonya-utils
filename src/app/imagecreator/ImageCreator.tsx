@@ -392,7 +392,7 @@ const ImageCreator = () => {
   const [history, setHistory] = useState<number[][][]>([image]);
   const [historyIndex, setHistoryIndex] = useState(0); // counted backwards, the higher the number the further back in history
   const [name, setName] = useState('');
-  const [selectedSavedImage, setSelectedSavedImage] = useState<string>();
+  const [selectedSavedImage] = useState<string>();
   const [greyScale, setGreyScale] = useState(false);
   const [currentColour, setCurrentColour] = useState(255); // 0 = black, 255 = white
 
