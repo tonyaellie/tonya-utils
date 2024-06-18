@@ -14,7 +14,6 @@ To see a list of all the utilities, go to [https://utils.tokia.dev/](https://uti
 - QR Code Generator: A tool for generating QR codes from a given piece of text.
 - Reader: A tool for reading a given piece of text aloud.
 - Request Sender: A tool for sending HTTP requests.
-- Formatter: A tool for formatting JSON/XML/HTML/CSS/JavaScript.
 - Timer: A tool for creating timers.
 - Stopwatch: A tool for creating stopwatches.
 - Quadratic Solver: A tool for solving quadratic equations (possibly with complex numbers and higher degree polynomials).

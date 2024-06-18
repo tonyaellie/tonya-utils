@@ -108,6 +108,11 @@ const links: {
     href: '/teams',
     description: 'Generate teams from a given list of names.',
   },
+  {
+    name: 'Formatter',
+    href: '/formatter',
+    description: 'Format code.',
+  },
 ].sort((a, b) => a.name.localeCompare(b.name));
 
 const RootLayout = ({
