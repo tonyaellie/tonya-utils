@@ -83,6 +83,9 @@ dependencies:
   reactflow:
     specifier: ^11.11.3
     version: 11.11.3(@types/react@18.3.3)(react-dom@18.3.0)(react@18.3.0)
+  sentiment:
+    specifier: ^5.0.2
+    version: 5.0.2
   sonner:
     specifier: ^1.5.0
     version: 1.5.0(react-dom@18.3.0)(react@18.3.0)
@@ -101,6 +104,9 @@ dependencies:
   tailwindcss-animate:
     specifier: ^1.0.7
     version: 1.0.7(tailwindcss@3.4.4)
+  text-readability:
+    specifier: ^1.1.0
+    version: 1.1.0
   zod:
     specifier: ^3.23.8
     version: 3.23.8
@@ -118,6 +124,9 @@ devDependencies:
   '@types/react-dom':
     specifier: ^18.2.19
     version: 18.3.0
+  '@types/sentiment':
+    specifier: ^5.0.4
+    version: 5.0.4
   '@typescript-eslint/eslint-plugin':
     specifier: ^5.62.0
     version: 5.62.0(@typescript-eslint/parser@5.62.0)(eslint@8.57.0)(typescript@5.4.5)
@@ -2883,6 +2892,10 @@ packages:
     resolution: {integrity: sha512-I8EUhyrgfLrcTkzV3TSsGyl1tSuPrEDzr0yd5m90UgNxQkyDXULk3b6MlQqTCpZpNtWe1K0hzclnZkTcLBe2UQ==}
     dev: true
 
+  /@types/sentiment@5.0.4:
+    resolution: {integrity: sha512-6FL0CYijhnrR3gHbu7boAJn8zRCekJXBPfIHLkIgWbkY+hz5Dwfsq79FM7l/tLZKuEgQWktnzf6JqV2UCWKrbg==}
+    dev: true
+
   /@typescript-eslint/eslint-plugin@5.62.0(@typescript-eslint/parser@5.62.0)(eslint@8.57.0)(typescript@5.4.5):
     resolution: {integrity: sha512-TiZzBSJja/LbhNPvk6yc0JrX9XqhQ0hdh6M2svYfsHGejaKFIAGd9MQ+ERIMzLGlN/kZoYIgdxFV0PuljTKXag==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
@@ -5443,6 +5456,11 @@ packages:
     hasBin: true
     dev: true
 
+  /sentiment@5.0.2:
+    resolution: {integrity: sha512-ZeC3y0JsOYTdwujt5uOd7ILJNilbgFzUtg/LEG4wUv43LayFNLZ28ec8+Su+h3saHlJmIwYxBzfDHHZuiMA15g==}
+    engines: {node: '>=8.0'}
+    dev: false
+
   /set-function-length@1.2.2:
     resolution: {integrity: sha512-pgRc4hJ4/sNjWCSS9AmnS40x3bNMDTknHgL5UaMBTMyJnU90EgWh1Rz+MC9eFu4BuN/UwZjKQuY/1v3rM7HMfg==}
     engines: {node: '>= 0.4'}
@@ -5721,6 +5739,13 @@ packages:
       sucrase: 3.35.0
     transitivePeerDependencies:
       - ts-node
+
+  /text-readability@1.1.0:
+    resolution: {integrity: sha512-I1kqUJX8nJwzCvCZSV945sjisi4NBnwZ5iwzzdsRXbqH8fKqhjwZMGdBm01UMb1K1EWrJ7jFozjXUobs7JZA6g==}
+    dependencies:
+      pluralize: 8.0.0
+      syllable: 5.0.1
+    dev: false
 
   /text-table@0.2.0:
     resolution: {integrity: sha512-N+8UisAXDGk8PFXP4HAzVR9nbfmVJ3zYLAWiTIoqC5v5isinhr+r5uaO8+7r3BMfuNIufIsA7RdpVgacC2cSpw==}

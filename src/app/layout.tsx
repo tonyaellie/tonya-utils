@@ -29,9 +29,10 @@ const links: {
     description: 'Home page.',
   },
   {
-    name: 'Counter',
-    href: '/counter',
-    description: 'Count characters, words, or lines in a given piece of text.',
+    name: 'Text Analyser',
+    href: '/analyser',
+    description:
+      'Analyse text for things such as length, sentiment, language, etc.',
   },
   {
     name: 'Diff',
@@ -106,11 +107,6 @@ const links: {
     name: 'Teams Generator',
     href: '/teams',
     description: 'Generate teams from a given list of names.',
-  },
-  {
-    name: 'Syllable Counter',
-    href: '/syllable',
-    description: 'Count the number of syllables in a given piece of text.',
   },
 ].sort((a, b) => a.name.localeCompare(b.name));
 
