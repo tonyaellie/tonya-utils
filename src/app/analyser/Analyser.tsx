@@ -27,6 +27,8 @@ const Counter = () => {
     const chars = text.replace(/\n/g, '').split('');
     const readability = rs.fleschReadingEase(text);
 
+    console.log(sentiment.analyze(text));
+
     return {
       chars: chars.length,
       words: rs.lexiconCount(text),
@@ -91,7 +93,22 @@ const Counter = () => {
         </div>
         <div className="relative w-full">
           <div className="absolute left-[13px] top-[9px] whitespace-pre-wrap break-words text-sm text-transparent">
-            {text}
+            {text.split(/([^a-zA-Z])/).map((word, i) => (
+              <span
+                key={`${i}-${word}`}
+                className={
+                  counts.sentiment.positive.includes(word.toLocaleLowerCase())
+                    ? 'rounded-sm bg-green-900'
+                    : counts.sentiment.negative.includes(
+                        word.toLocaleLowerCase()
+                      )
+                    ? 'rounded-sm bg-red-900'
+                    : ''
+                }
+              >
+                {word}
+              </span>
+            ))}
           </div>
           <AutosizeTextarea
             className="absolute left-0 top-0 bg-transparent"
