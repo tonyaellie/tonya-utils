@@ -48,7 +48,7 @@ const SyllableDisplay = ({ line }: { line: string }) => {
   return (
     <div className="flex w-[calc(100%-2px)] break-words text-sm">
       <div>{syllableCount}</div>
-      <div className="min-w-0 whitespace-pre-wrap text-wrap text-transparent">
+      <div className="min-w-0 select-none whitespace-pre-wrap text-wrap text-transparent">
         {line}
       </div>
     </div>
