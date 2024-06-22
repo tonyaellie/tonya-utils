@@ -3,8 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "next build",
+    "build": "npm run build:workers && next build",
+    "build:workers": "esbuild src/workers/**/*.ts --outdir=public/workers --bundle --format=esm --target=es6",
     "dev": "next dev",
+    "watch:workers": "esbuild src/workers/**/*.ts --outdir=public/workers --bundle --format=esm --target=es6 --watch",
     "lint": "next lint",
     "start": "next start",
     "typecheck": "tsc --noEmit"
@@ -55,6 +57,7 @@
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
     "autoprefixer": "^10.4.19",
+    "esbuild": "^0.21.5",
     "eslint": "^8.57.0",
     "eslint-config-next": "13.0.2",
     "postcss": "^8.4.38",

@@ -1,11 +1,8 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
-import Sentiment from 'sentiment';
 import { syllable } from 'syllable';
-// @ts-expect-error text-readability is untyped
-import rs from 'text-readability';
 import { create } from 'zustand';
 
 import { AutosizeTextarea } from '@/components/ui/autosize-textarea';
@@ -13,7 +10,22 @@ import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 
 // TODO: make more efficient e.g. offload calculations to worker, debounce updates
 
-const sentiment = new Sentiment();
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const debounce = <T extends (...args: any[]) => any>(
+  callback: T,
+  waitFor: number
+) => {
+  let timeout: ReturnType<typeof setTimeout>;
+  return (...args: Parameters<T>): ReturnType<T> => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let result: any;
+    timeout && clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      result = callback(...args);
+    }, waitFor);
+    return result;
+  };
+};
 
 const store = create<{
   lineToSentiment: Map<string, number>;
@@ -57,33 +69,60 @@ const SyllableDisplay = ({ line }: { line: string }) => {
 
 const Counter = () => {
   const [text, setText] = useState('');
-  const counts = useMemo(() => {
-    const lines = text.split('\n');
-    const chars = text.replace(/\n/g, '').split('');
-    const readability = rs.fleschReadingEase(text);
+  const workerRef = useRef<Worker>();
 
-    return {
-      chars: chars.length,
-      words: rs.lexiconCount(text),
-      lines: lines.length,
-      syllables: syllable(text),
-      sentiment: sentiment.analyze(text),
-      readability:
-        readability > 90
-          ? 'Very Easy'
-          : readability > 80
-          ? 'Easy'
-          : readability > 70
-          ? 'Fairly Easy'
-          : readability > 60
-          ? 'Standard'
-          : readability > 50
-          ? 'Fairly Difficult'
-          : readability > 30
-          ? 'Difficult'
-          : 'Very Confusing',
+  const [counts, setCounts] = useState({
+    chars: 0,
+    words: 0,
+    lines: 1,
+    syllables: 0,
+    sentiment: {
+      score: 0,
+      words: [] as string[],
+      positive: [] as string[],
+      negative: [] as string[],
+    },
+    readability: 'Standard',
+  });
+
+  useEffect(() => {
+    workerRef.current = new Worker('/workers/analyser.js', {
+      type: 'module',
+    });
+    workerRef.current.onmessage = (event) => {
+      console.log('Worker message:', event.data);
+      setCounts(event.data);
     };
-  }, [text]);
+    workerRef.current.onerror = (error) => {
+      console.error('Worker error:', error);
+    };
+    return () => {
+      if (workerRef.current) {
+        console.log('Terminating worker');
+        workerRef.current.terminate();
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const debouncedUpdate = useMemo(
+    () =>
+      debounce((text) => {
+        const id = Math.random().toString();
+        if (workerRef.current) {
+          workerRef.current.postMessage({
+            text,
+            id,
+          });
+        }
+        console.log('Worker sent');
+      }, 300),
+    []
+  );
+
+  useEffect(() => {
+    debouncedUpdate(text);
+  }, [text, debouncedUpdate]);
 
   return (
     <>
@@ -124,26 +163,30 @@ const Counter = () => {
         </div>
         <div className="absolute left-[40px] w-[calc(100%-40px)]">
           <div className="absolute left-[13px] top-[9px] mr-[12px] whitespace-pre-wrap break-words bg-background text-sm text-transparent">
-            {text.split(/([^a-zA-Z])/).map((word, i) =>
-              counts.sentiment.words.includes(word.toLocaleLowerCase()) ? (
-                <span
-                  key={`${i}-${word}`}
-                  className={
-                    counts.sentiment.positive.includes(word.toLocaleLowerCase())
-                      ? 'rounded-sm bg-green-900'
-                      : counts.sentiment.negative.includes(
-                          word.toLocaleLowerCase()
-                        )
-                      ? 'rounded-sm bg-red-900'
-                      : ''
-                  }
-                >
-                  {word}
-                </span>
-              ) : (
-                word
-              )
-            )}
+            {text.length < 10000 &&
+              // TODO: find a way to make this work with large texts
+              text.split(/([^a-zA-Z])/).map((word, i) =>
+                counts.sentiment.words.includes(word.toLocaleLowerCase()) ? (
+                  <span
+                    key={`${i}-${word}`}
+                    className={
+                      counts.sentiment.positive.includes(
+                        word.toLocaleLowerCase()
+                      )
+                        ? 'rounded-sm bg-green-900'
+                        : counts.sentiment.negative.includes(
+                            word.toLocaleLowerCase()
+                          )
+                        ? 'rounded-sm bg-red-900'
+                        : ''
+                    }
+                  >
+                    {word}
+                  </span>
+                ) : (
+                  word
+                )
+              )}
           </div>
           <AutosizeTextarea
             className="absolute left-0 top-0 bg-transparent"
