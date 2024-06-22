@@ -116,7 +116,7 @@ const Counter = () => {
           });
         }
         console.log('Worker sent');
-      }, 300),
+      }, 100),
     []
   );
 
