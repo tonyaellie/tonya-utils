@@ -9,6 +9,7 @@ import { AutosizeTextarea } from '@/components/ui/autosize-textarea';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 
 // TODO: make more efficient e.g. offload calculations to worker, debounce updates
+// TODO: hide or move copyright to bottom of page
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const debounce = <T extends (...args: any[]) => any>(

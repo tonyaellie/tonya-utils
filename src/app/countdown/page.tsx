@@ -1,3 +1,5 @@
+import { Suspense } from 'react';
+
 import type { Metadata } from 'next';
 
 import Countdown from './Countdown';
@@ -9,7 +11,11 @@ export const metadata: Metadata = {
 };
 
 const CountdownPage = () => {
-  return <Countdown />;
+  return (
+    <Suspense>
+      <Countdown />
+    </Suspense>
+  );
 };
 
 export default CountdownPage;
