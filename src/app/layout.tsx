@@ -113,6 +113,12 @@ const links: {
     href: '/formatter',
     description: 'Format code.',
   },
+  {
+    name: 'Countdown',
+    href: '/countdown',
+    description:
+      'Countdown to a specified date or for a specified amount of time.',
+  },
 ].sort((a, b) => a.name.localeCompare(b.name));
 
 const RootLayout = ({
