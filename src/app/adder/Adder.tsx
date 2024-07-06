@@ -316,7 +316,7 @@ const Adder = () => {
             <div className="flex gap-2">
               <Button
                 onClick={() => {
-                  setHistory(getHistory().filter((_, i) => i !== index));
+                  setHistory(getHistory().filter((_, i) => i !== getHistory().length - index - 1));
                   forceUpdate();
                 }}
                 variant="destructive"
