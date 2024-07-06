@@ -36,11 +36,7 @@ const setHistory = (history: Decimal[][]) => {
 };
 
 const Adder = () => {
-  const [numbers, setNumbers] = useState([
-    new Decimal(12),
-    new Decimal(3.34),
-    new Decimal(20.29),
-  ]);
+  const [numbers, setNumbers] = useState<Decimal[]>([]);
   const [currentNumber, setCurrentNumber] = useState('');
   const [, forceUpdate] = useReducer((x) => x + 1, 0);
 
