@@ -108,6 +108,20 @@ const Adder = () => {
   return (
     <div className="flex max-w-sm flex-col gap-2">
       <AutosizeTextarea
+        onPaste={(e) => {
+          e.preventDefault();
+          const text = e.clipboardData
+            .getData('text/plain')
+            .replace(/[^0-9.+]/g, '');
+          console.log(text);
+          setNumbers([
+            ...numbers,
+            ...text
+              .split('+')
+              .filter((num) => num.length > 0)
+              .map((num) => new Decimal(num)),
+          ]);
+        }}
         minHeight={1}
         value={
           numbers.map((num) => num.toString()).join(' + ') +
@@ -115,7 +129,9 @@ const Adder = () => {
           currentNumber
         }
         onKeyDown={(e) => {
-          e.preventDefault();
+          if (!((e.key === 'c' || e.key === 'v' || e.key === 'a') && e.ctrlKey)) {
+            e.preventDefault();
+          }
           if (e.key === 'Backspace' || e.key === 'Delete') {
             e.preventDefault();
             handlePress('del');
