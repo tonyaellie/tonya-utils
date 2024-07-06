@@ -119,6 +119,11 @@ const links: {
     description:
       'Countdown to a specified date or for a specified amount of time.',
   },
+  {
+    name: 'Adder',
+    href: '/adder',
+    description: 'Adds numbers.',
+  },
 ].sort((a, b) => a.name.localeCompare(b.name));
 
 const RootLayout = ({
