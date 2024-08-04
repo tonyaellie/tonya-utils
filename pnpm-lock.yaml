@@ -119,6 +119,9 @@ dependencies:
   text-readability:
     specifier: ^1.1.0
     version: 1.1.0
+  tttime:
+    specifier: ^1.0.0
+    version: 1.0.0
   zod:
     specifier: ^3.23.8
     version: 3.23.8
@@ -6306,6 +6309,10 @@ packages:
       tslib: 1.14.1
       typescript: 5.4.5
     dev: true
+
+  /tttime@1.0.0:
+    resolution: {integrity: sha512-+WexyUQTbehpvzCo+C03jJWZKl0q//VQd5EkZRPnw1jeGFVbTdYTVq9yVgcbo/oSiW6fN0GxEBBFNuLOnwV63w==}
+    dev: false
 
   /type-check@0.4.0:
     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}
