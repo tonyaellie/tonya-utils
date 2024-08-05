@@ -302,13 +302,13 @@ const Adder = () => {
                 {row.reduce((a, b) => a.plus(b), new Decimal(0)).toString()}
               </Badge>
               <Badge variant="outline">
-                Num: {row.length + (currentNumber ? 1 : 0)}
+                Num: {row.length}
               </Badge>
               <Badge variant="outline">
                 Mean:{' '}
                 {row
                   .reduce((a, b) => a.plus(b), new Decimal(0))
-                  .div(row.length + (currentNumber ? 1 : 0))
+                  .div(row.length)
                   .toDecimalPlaces(2)
                   .toString()}
               </Badge>
