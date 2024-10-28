@@ -10,6 +10,7 @@ import { set, z } from 'zod';
 import { AutosizeTextarea } from '@/components/ui/autosize-textarea';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
 
 const HistorySchema = z.array(z.array(z.string()));
 
@@ -39,6 +40,8 @@ const Adder = () => {
   const [numbers, setNumbers] = useState<Decimal[]>([]);
   const [currentNumber, setCurrentNumber] = useState('');
   const [, forceUpdate] = useReducer((x) => x + 1, 0);
+  const [edit, setEdit] = useState(false);
+  const [editValue, setEditValue] = useState('');
 
   const handlePress = (button: string) => {
     switch (button) {
@@ -83,21 +86,32 @@ const Adder = () => {
         break;
       case 'save':
         {
-          const num = currentNumber
-            .replace(/(\.[0]+)0+$/, (match) => match.replace(/0+$/, ''))
-            .replace(/\.$/, '');
-          setHistory([
-            ...getHistory(),
-            num.length > 0 && num !== '0'
-              ? [...numbers, new Decimal(num)]
-              : numbers,
-          ]);
+          if (edit) {
+            setHistory([
+              ...getHistory(),
+              editValue
+                .split('+')
+                .filter((num) => num.length > 0)
+                .map((num) => new Decimal(num)),
+            ]);
+          } else {
+            const num = currentNumber
+              .replace(/(\.[0]+)0+$/, (match) => match.replace(/0+$/, ''))
+              .replace(/\.$/, '');
+            setHistory([
+              ...getHistory(),
+              num.length > 0 && num !== '0'
+                ? [...numbers, new Decimal(num)]
+                : numbers,
+            ]);
+          }
           forceUpdate();
         }
         break;
       case 'clear':
         setNumbers([]);
         setCurrentNumber('');
+        setEditValue('');
         break;
       default:
         console.log('invalid button');
@@ -124,12 +138,17 @@ const Adder = () => {
         }}
         minHeight={1}
         value={
-          numbers.map((num) => num.toString()).join(' + ') +
-          (numbers.length === 0 ? '' : ' + ') +
-          currentNumber
+          edit
+            ? editValue
+            : numbers.map((num) => num.toString()).join(' + ') +
+              (numbers.length === 0 ? '' : ' + ') +
+              currentNumber
         }
         onKeyDown={(e) => {
-          if (!((e.key === 'c' || e.key === 'v' || e.key === 'a') && e.ctrlKey)) {
+          if (edit) return;
+          if (
+            !((e.key === 'c' || e.key === 'v' || e.key === 'a') && e.ctrlKey)
+          ) {
             e.preventDefault();
           }
           if (e.key === 'Backspace' || e.key === 'Delete') {
@@ -149,25 +168,72 @@ const Adder = () => {
             handlePress('.');
           }
         }}
+        onChange={(e) => {
+          if (edit) {
+            setEditValue(e.target.value.replace(/[^0-9.+]/g, ''));
+          }
+        }}
       />
       <div className="flex gap-2">
         <Badge>
           Sum:{' '}
-          {numbers
+          {(edit
+            ? editValue
+                .split('+')
+                .filter((num) => num)
+                .map((num) => new Decimal(num))
+            : numbers
+          )
             .reduce((a, b) => a.plus(b), new Decimal(0))
-            .plus(currentNumber || 0)
+            .plus(edit ? 0 : currentNumber || 0)
             .toString()}
         </Badge>
-        <Badge>Num: {numbers.length + (currentNumber ? 1 : 0)}</Badge>
+        <Badge>
+          Num:{' '}
+          {(edit ? editValue.split('+').filter((num) => num) : numbers).length +
+            (currentNumber && !edit ? 1 : 0)}
+        </Badge>
         <Badge>
           Mean:{' '}
-          {numbers
+          {(edit
+            ? editValue
+                .split('+')
+                .filter((num) => num)
+                .map((num) => new Decimal(num))
+            : numbers
+          )
             .reduce((a, b) => a.plus(b), new Decimal(0))
-            .plus(currentNumber || 0)
-            .div(numbers.length + (currentNumber ? 1 : 0))
+            .plus(edit ? 0 : currentNumber || 0)
+            .div(
+              (edit ? editValue.split('+').filter((num) => num) : numbers)
+                .length + (currentNumber && !edit ? 1 : 0)
+            )
             .toDecimalPlaces(2)
             .toString()}
         </Badge>
+        Edit:
+        <Switch
+          checked={edit}
+          onCheckedChange={(checked) => {
+            setEdit(checked);
+
+            if (checked) {
+              setEditValue(
+                numbers.map((num) => num.toString()).join('+') +
+                  (numbers.length === 0 ? '' : '+') +
+                  currentNumber
+              );
+            } else {
+              setNumbers(
+                editValue
+                  .split('+')
+                  .filter((num) => num.length > 0)
+                  .map((num) => new Decimal(num))
+              );
+              setCurrentNumber('');
+            }
+          }}
+        />
       </div>
       <div className="grid grid-cols-3 gap-2">
         <Button
@@ -180,6 +246,7 @@ const Adder = () => {
           Clear
         </Button>
         <Button
+          disabled={edit}
           onClick={() => {
             handlePress('del');
           }}
@@ -195,6 +262,7 @@ const Adder = () => {
           Save
         </Button>
         <Button
+          disabled={edit}
           onClick={() => {
             handlePress('1');
           }}
@@ -203,6 +271,7 @@ const Adder = () => {
           1
         </Button>
         <Button
+          disabled={edit}
           onClick={() => {
             handlePress('2');
           }}
@@ -211,6 +280,7 @@ const Adder = () => {
           2
         </Button>
         <Button
+          disabled={edit}
           onClick={() => {
             handlePress('3');
           }}
@@ -219,6 +289,7 @@ const Adder = () => {
           3
         </Button>
         <Button
+          disabled={edit}
           onClick={() => {
             handlePress('4');
           }}
@@ -227,6 +298,7 @@ const Adder = () => {
           4
         </Button>
         <Button
+          disabled={edit}
           onClick={() => {
             handlePress('5');
           }}
@@ -235,6 +307,7 @@ const Adder = () => {
           5
         </Button>
         <Button
+          disabled={edit}
           onClick={() => {
             handlePress('6');
           }}
@@ -243,6 +316,7 @@ const Adder = () => {
           6
         </Button>
         <Button
+          disabled={edit}
           onClick={() => {
             handlePress('7');
           }}
@@ -251,6 +325,7 @@ const Adder = () => {
           7
         </Button>
         <Button
+          disabled={edit}
           onClick={() => {
             handlePress('8');
           }}
@@ -259,6 +334,7 @@ const Adder = () => {
           8
         </Button>
         <Button
+          disabled={edit}
           onClick={() => {
             handlePress('9');
           }}
@@ -267,6 +343,7 @@ const Adder = () => {
           9
         </Button>
         <Button
+          disabled={edit}
           onClick={() => {
             handlePress('.');
           }}
@@ -275,6 +352,7 @@ const Adder = () => {
           .
         </Button>
         <Button
+          disabled={edit}
           onClick={() => {
             handlePress('0');
           }}
@@ -283,6 +361,7 @@ const Adder = () => {
           0
         </Button>
         <Button
+          disabled={edit}
           onClick={() => {
             handlePress('+');
           }}
@@ -301,9 +380,7 @@ const Adder = () => {
                 Sum:{' '}
                 {row.reduce((a, b) => a.plus(b), new Decimal(0)).toString()}
               </Badge>
-              <Badge variant="outline">
-                Num: {row.length}
-              </Badge>
+              <Badge variant="outline">Num: {row.length}</Badge>
               <Badge variant="outline">
                 Mean:{' '}
                 {row
@@ -316,7 +393,11 @@ const Adder = () => {
             <div className="flex gap-2">
               <Button
                 onClick={() => {
-                  setHistory(getHistory().filter((_, i) => i !== getHistory().length - index - 1));
+                  setHistory(
+                    getHistory().filter(
+                      (_, i) => i !== getHistory().length - index - 1
+                    )
+                  );
                   forceUpdate();
                 }}
                 variant="destructive"
