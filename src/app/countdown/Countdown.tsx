@@ -1,11 +1,11 @@
 'use client';
 
-import { useCallback, useEffect, useReducer } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 
 import Fireworks from '@fireworks-js/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Delete } from 'lucide-react';
-import { usePathname, useSearchParams, useRouter } from 'next/navigation';
+import { useQueryState } from 'nuqs';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -21,82 +21,145 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Textarea } from '@/components/ui/textarea';
 
 const formSchema = z.object({
   endDate: z.date(),
   length: z.string(), // in seconds
   selected: z.union([z.literal('date'), z.literal('time')]),
+  message: z.string().optional(),
 });
 
-const CountdownToDate = ({ date }: { date: Date }) => {
-  const [, forceUpdate] = useReducer((x) => x + 1, 0);
+const useCountdown = (targetDate: Date) => {
+  const countDownDate = new Date(targetDate).getTime();
+
+  const [countDown, setCountDown] = useState(
+    countDownDate - new Date().getTime()
+  );
 
   useEffect(() => {
-    const interval = setInterval(() => forceUpdate(), 100);
+    const interval = setInterval(() => {
+      setCountDown(countDownDate - new Date().getTime());
+    }, 100);
+
     return () => clearInterval(interval);
-  }, []);
+  }, [countDownDate]);
 
-  if (date.getTime() - new Date().getTime() < 0) {
-    return (
-      <div className="flex flex-col items-center justify-center gap-2 text-8xl">
-        Timer has completed!
-        <Fireworks className="absolute bottom-0 left-0 right-0 top-0" />
-      </div>
-    );
-  }
+  return getReturnValues(countDown);
+};
 
-  const years = Math.floor(
-    (date.getTime() - new Date().getTime()) / 31536000000
-  );
+const getReturnValues = (countDown: number) => {
+  // calculate time left
+  const millisecondsPerSecond = 1000;
+  const millisecondsPerMinute = millisecondsPerSecond * 60;
+  const millisecondsPerHour = millisecondsPerMinute * 60;
+  const millisecondsPerDay = millisecondsPerHour * 24;
+  const millisecondsPerYear = millisecondsPerDay * 365.25;
+  const millisecondsPerMonth = millisecondsPerYear / 12;
+
+  const years = Math.floor(countDown / millisecondsPerYear);
   const months = Math.floor(
-    (date.getTime() - new Date().getTime() - years * 31536000000) / 2592000000
+    (countDown % millisecondsPerYear) / millisecondsPerMonth
   );
   const days = Math.floor(
-    (date.getTime() -
-      new Date().getTime() -
-      years * 31536000000 -
-      months * 2592000000) /
-      86400000
+    (countDown % millisecondsPerMonth) / millisecondsPerDay
   );
   const hours = Math.floor(
-    (date.getTime() -
-      new Date().getTime() -
-      years * 31536000000 -
-      months * 2592000000 -
-      days * 86400000) /
-      3600000
+    (countDown % millisecondsPerDay) / millisecondsPerHour
   );
   const minutes = Math.floor(
-    (date.getTime() -
-      new Date().getTime() -
-      years * 31536000000 -
-      months * 2592000000 -
-      days * 86400000 -
-      hours * 3600000) /
-      60000
+    (countDown % millisecondsPerHour) / millisecondsPerMinute
   );
   const seconds = Math.floor(
-    (date.getTime() -
-      new Date().getTime() -
-      years * 31536000000 -
-      months * 2592000000 -
-      days * 86400000 -
-      hours * 3600000 -
-      minutes * 60000) /
-      1000
+    (countDown % millisecondsPerMinute) / millisecondsPerSecond
+  );
+
+  const finished = countDown < 0;
+
+  return [years, months, days, hours, minutes, seconds, finished] as const;
+};
+
+const NumberDisplay = ({
+  number,
+  length,
+  name,
+}: {
+  number: number;
+  length?: number;
+  name: string;
+}) => {
+  return (
+    <div className="flex flex-col items-center justify-center gap-2 text-center">
+      <span suppressHydrationWarning>
+        {length ? number.toString().padStart(length, '0') : number}
+      </span>
+      <span
+        className="text-2xl md:text-3xl lg:text-4xl"
+        suppressHydrationWarning
+      >
+        {name}
+        {number === 1 ? '' : 's'}
+      </span>
+    </div>
+  );
+};
+
+const CountdownToDate = ({
+  date,
+  message,
+}: {
+  date: Date;
+  message: string | null;
+}) => {
+  const [years, months, days, hours, minutes, seconds, finished] =
+    useCountdown(date);
+
+  const countdown = finished ? (
+    <div className="flex flex-col items-center justify-center gap-2 text-center text-8xl">
+      {message ?? 'Timer has completed!'}
+      <Fireworks className="absolute bottom-0 left-0 right-0 top-0" />
+    </div>
+  ) : (
+    <div
+      suppressHydrationWarning
+      className="flex flex-row flex-wrap items-center justify-center gap-4 text-6xl font-bold md:text-8xl lg:text-9xl"
+      style={{
+        background:
+          'linear-gradient(45deg, #e05e6b, #ff9966, #98c379, #66c2a5, #7ea6e0, #b392f0, #e05e6b)',
+        WebkitBackgroundClip: 'text',
+        backgroundClip: 'text',
+        color: 'transparent',
+        WebkitTextFillColor: 'transparent',
+        animation: 'colorChange 3s linear infinite',
+      }}
+    >
+      {years > 0 && <NumberDisplay number={years} name="year" />}
+      {(months > 0 || years > 0) && (
+        <NumberDisplay number={months} length={2} name="month" />
+      )}
+      {(days > 0 || months > 0 || years > 0) && (
+        <NumberDisplay number={days} length={2} name="day" />
+      )}
+      {(hours > 0 || days > 0 || months > 0 || years > 0) && (
+        <NumberDisplay number={hours} length={2} name="hour" />
+      )}
+      {(minutes > 0 || hours > 0 || days > 0 || months > 0 || years > 0) && (
+        <NumberDisplay number={minutes} length={2} name="minute" />
+      )}
+      {(seconds >= 0 ||
+        minutes > 0 ||
+        hours > 0 ||
+        days > 0 ||
+        months > 0 ||
+        years > 0) && (
+        <NumberDisplay number={seconds} length={2} name="second" />
+      )}
+    </div>
   );
 
   return (
-    <div
-      suppressHydrationWarning
-      className="flex flex-col items-center justify-center gap-2 text-8xl"
-    >
-      {years > 0 && <span>{years} years</span>}
-      {months > 0 && <span>{months} months</span>}
-      {days > 0 && <span>{days} days</span>}
-      {hours > 0 && <span>{hours} hours</span>}
-      {minutes > 0 && <span>{minutes} minutes</span>}
-      {seconds > 0 && <span>{seconds} seconds</span>}
+    <div className="absolute left-0 top-0 z-[100] flex min-h-screen w-full items-center justify-center bg-background">
+      {countdown}
     </div>
   );
 };
@@ -104,23 +167,8 @@ const CountdownToDate = ({ date }: { date: Date }) => {
 const Countdown = () => {
   const [, forceUpdate] = useReducer((x) => x + 1, 0); // this is a hack to force a rerender
 
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  const createQueryString = useCallback(
-    (name: string, value: string) => {
-      if (!searchParams) {
-        return;
-      }
-
-      const params = new URLSearchParams(Array.from(searchParams));
-      params.set(name, value);
-
-      return params.toString();
-    },
-    [searchParams]
-  );
+  const [endDate, setEndDate] = useQueryState('endDate', { history: 'push' });
+  const [message, setMessage] = useQueryState('message', { history: 'push' });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -132,9 +180,9 @@ const Countdown = () => {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    let endDate = values.endDate;
+    let newEndDate = values.endDate;
     if (values.selected === 'time') {
-      endDate = new Date(
+      newEndDate = new Date(
         new Date().getTime() +
           (parseInt(values.length.slice(0, 2)) * 3600 +
             parseInt(values.length.slice(2, 4)) * 60 +
@@ -142,11 +190,15 @@ const Countdown = () => {
             1000
       );
     }
-    console.log(endDate);
-    router.push(
-      pathname + '?' + createQueryString('endDate', endDate.toISOString())
-    );
+    console.log(newEndDate);
+    setEndDate(newEndDate.toISOString());
+    if (values.message) {
+      setMessage(values.message);
+    }
   };
+
+  const onInvalid = (errors: unknown) =>
+    console.log('error submitting', errors);
 
   const handleNumberClick = (num: string) => {
     console.log(num);
@@ -164,11 +216,14 @@ const Countdown = () => {
 
   return (
     <>
-      {searchParams.get('endDate') ? (
-        <CountdownToDate date={new Date(searchParams.get('endDate')!)} />
+      {endDate ? (
+        <CountdownToDate date={new Date(endDate)} message={message} />
       ) : (
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form
+            onSubmit={form.handleSubmit(onSubmit, onInvalid)}
+            className="space-y-4"
+          >
             <Tabs
               value={form.getValues('selected')}
               onValueChange={(value) => {
@@ -353,6 +408,23 @@ const Countdown = () => {
                 />
               </TabsContent>
             </Tabs>
+
+            <FormField
+              name="message"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Message</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      className="w-full"
+                      value={field.value}
+                      onChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <Button type="submit">Submit</Button>
           </form>

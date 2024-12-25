@@ -2,6 +2,7 @@ import { Menu } from 'lucide-react';
 import Link from 'next/link';
 import Script from 'next/script';
 import NextTopLoader from 'nextjs-toploader';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 
 import '@/styles/globals.css';
 
@@ -190,7 +191,9 @@ const RootLayout = ({
             </Link>
           </header>
           <Separator />
-          <main className="flex-grow px-4 pt-4">{children}</main>
+          <main className="flex-grow px-4 pt-4">
+            <NuqsAdapter>{children}</NuqsAdapter>
+          </main>
           <footer className="flex justify-center">
             <Link
               // make this be at bottom of scroll or bottom of screen whichever is lower
