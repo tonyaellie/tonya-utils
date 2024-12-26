@@ -90,7 +90,7 @@ const NumberDisplay = ({
 }) => {
   return (
     <div className="flex flex-col items-center justify-center gap-2 text-center">
-      <span suppressHydrationWarning>
+      <span className="font-mono" suppressHydrationWarning>
         {length ? number.toString().padStart(length, '0') : number}
       </span>
       <span
