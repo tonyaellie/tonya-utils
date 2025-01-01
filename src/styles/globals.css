@@ -47,3 +47,12 @@
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes colorChange {
+  0%, 100% {
+    filter: hue-rotate(0deg);
+  }
+  50% {
+    filter: hue-rotate(360deg);
+  }
+}
