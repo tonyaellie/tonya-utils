@@ -52,6 +52,7 @@ export type RFState = {
   removeNode: (id: string) => void;
   updateInput: (id: string, input: string) => void;
   updateOperation: (id: string, operation: string) => void;
+  updateConfig: (id: string, config: any) => void;
   updateType: (id: string, type: string) => void;
   // onSelectionChange: OnSelectionChangeFunc;
 };
@@ -206,7 +207,7 @@ export const store = create(
                 throw new Error('Operation not implemented');
               }
 
-              text = operation(parent.data.text ?? '');
+              text = operation.execute(parent.data.text ?? '', node.data.config);
 
               break;
             case 'output':
@@ -265,7 +266,30 @@ export const store = create(
         set({
           nodes: get().nodes.map((node) => {
             if (node.id === id && node.data.type === 'transform') {
-              node.data = { ...node.data, operation } as TransformNodeData;
+              let config = undefined;
+              if (node.data.operation === operation) {
+                // if the operation is the same, keep the config
+                config = node.data.config;
+              } else {
+                const op = operations.get(
+                  operation as typeof operationNames[number]
+                )!;
+                config = 'defaultConfig' in op ? op.defaultConfig : undefined;
+              }
+              node.data = { ...node.data, operation, config } as TransformNodeData;
+            }
+
+            return node;
+          }),
+        });
+
+        get().calculateNodeText();
+      },
+      updateConfig: (id, config) => {
+        set({
+          nodes: get().nodes.map((node) => {
+            if (node.id === id && node.data.type === 'transform') {
+              node.data = { ...node.data, config } as TransformNodeData;
             }
 
             return node;

@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 
-import { operationNames } from './operations';
+import { operationNames, operations } from './operations';
 import { store } from './store';
 
 export type InputNodeData = {
@@ -25,6 +25,7 @@ export type TransformNodeData = {
   type: 'transform';
   operation: (typeof operationNames)[number];
   text?: string;
+  config?: any;
 };
 
 export type OutputNodeData = {
@@ -88,7 +89,9 @@ export const InputNode = ({ data, id }: NodeProps<InputNodeData>) => {
 };
 
 export const TransformNode = ({ data, id }: NodeProps<TransformNodeData>) => {
-  const { updateOperation } = store();
+  const { updateOperation, updateConfig } = store();
+  const operation = operations.get(data.operation);
+  const ConfigComponent = operation?.ConfigComponent;
 
   return (
     <div className="rounded-md border-2 bg-background">
@@ -126,6 +129,12 @@ export const TransformNode = ({ data, id }: NodeProps<TransformNodeData>) => {
             </SelectContent>
           </Select>
         </div>
+        {ConfigComponent && (
+          <ConfigComponent
+            config={data.config}
+            onChange={(config: any) => updateConfig(id, config)}
+          />
+        )}
       </div>
       <Handle
         type="source"
