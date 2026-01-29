@@ -264,29 +264,29 @@ const Adder = () => {
         <Button
           disabled={edit}
           onClick={() => {
-            handlePress('1');
+            handlePress('7');
           }}
           variant="outline"
         >
-          1
+          7
         </Button>
         <Button
           disabled={edit}
           onClick={() => {
-            handlePress('2');
+            handlePress('8');
           }}
           variant="outline"
         >
-          2
+          8
         </Button>
         <Button
           disabled={edit}
           onClick={() => {
-            handlePress('3');
+            handlePress('9');
           }}
           variant="outline"
         >
-          3
+          9
         </Button>
         <Button
           disabled={edit}
@@ -318,29 +318,29 @@ const Adder = () => {
         <Button
           disabled={edit}
           onClick={() => {
-            handlePress('7');
+            handlePress('1');
           }}
           variant="outline"
         >
-          7
+          1
         </Button>
         <Button
           disabled={edit}
           onClick={() => {
-            handlePress('8');
+            handlePress('2');
           }}
           variant="outline"
         >
-          8
+          2
         </Button>
         <Button
           disabled={edit}
           onClick={() => {
-            handlePress('9');
+            handlePress('3');
           }}
           variant="outline"
         >
-          9
+          3
         </Button>
         <Button
           disabled={edit}
